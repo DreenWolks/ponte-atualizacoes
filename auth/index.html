@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Ponte · Login do Mercado Livre</title>
+<style>
+  :root { --bg:#0f1626; --card:#151f35; --line:#27355a; --text:#e6eaf3; --muted:#8692ae; --sale:#f2b33d; --supply:#3cc8b4; --loss:#ff7b6b; }
+  @media (prefers-color-scheme: light) { :root { --bg:#eef1f7; --card:#fff; --line:#d8dfeb; --text:#172036; --muted:#5f6b86; --sale:#b97a06; --supply:#0b8f7f; --loss:#cf4535; } }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; display:grid; place-items:center; background:var(--bg); color:var(--text); font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; padding:16px; }
+  .card { width:100%; max-width:520px; background:var(--card); border:1px solid var(--line); border-radius:20px; padding:28px; }
+  .mark { width:72px; height:48px; margin-bottom:14px; }
+  h1 { font-size:22px; margin:0 0 8px; }
+  p { margin:0 0 14px; color:var(--muted); }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; height:42px; padding:0 18px; border-radius:12px; border:1px solid var(--line); background:transparent; color:var(--text); font:600 15px system-ui,sans-serif; cursor:pointer; text-decoration:none; }
+  .btn.main { background:var(--supply); border-color:transparent; color:#042420; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; margin:16px 0 4px; }
+  input { width:100%; height:40px; border-radius:10px; border:1px solid var(--line); background:var(--bg); color:var(--text); padding:0 10px; font:13px ui-monospace,monospace; }
+  .err { color:var(--loss); }
+  .small { font-size:13px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <svg class="mark" viewBox="0 0 120 80" aria-hidden="true"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#f2b33d"/><stop offset="1" stop-color="#3cc8b4"/></linearGradient></defs><path d="M22 58 C 34 6, 86 6, 98 58" fill="none" stroke="url(#g)" stroke-width="9" stroke-linecap="round"/><circle cx="22" cy="58" r="11" fill="none" stroke="#f2b33d" stroke-width="9"/><circle cx="98" cy="58" r="11" fill="none" stroke="#3cc8b4" stroke-width="9"/></svg>
+  <div id="box"></div>
+</div>
+<script>
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var box = document.getElementById('box');
+    var esc = function (s) { return String(s || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+    if (q.get('error')) {
+      box.innerHTML = '<h1 class="err">O login não foi autorizado</h1><p>' + esc(q.get('error_description') || q.get('error')) + '</p><p>Volte ao Ponte e tente conectar de novo.</p>';
+      return;
+    }
+    if (!q.get('code')) {
+      box.innerHTML = '<h1>Ponte</h1><p>Esta página recebe o login do Mercado Livre e devolve para o app Ponte. Para conectar uma conta, abra o Ponte e clique em <b>Conectar conta</b>.</p>';
+      return;
+    }
+    var app = 'ponte://auth' + location.search;
+    box.innerHTML = '<h1>Voltando para o Ponte…</h1>' +
+      '<p>Se o navegador perguntar, clique em <b>Abrir Ponte</b>. Depois pode fechar esta aba.</p>' +
+      '<div class="row"><a class="btn main" id="open" href="' + esc(app) + '">Abrir o Ponte</a></div>' +
+      '<p class="small" style="margin-top:18px">Não abriu? Copie o endereço abaixo e cole no Ponte, na janela de conectar conta:</p>' +
+      '<input id="url" readonly value="' + esc(location.href) + '"><div class="row"><button class="btn" id="copy">Copiar</button></div>';
+    document.getElementById('copy').onclick = function () {
+      var i = document.getElementById('url'); i.select();
+      (navigator.clipboard ? navigator.clipboard.writeText(i.value) : Promise.reject()).catch(function () { document.execCommand('copy'); });
+      this.textContent = 'Copiado!';
+    };
+    setTimeout(function () { location.href = app; }, 300);
+  })();
+</script>
+</body>
+</html>
