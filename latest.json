@@ -1,0 +1,10 @@
+{
+  "version": "1.3.0",
+  "file": "app-1.3.0.asar",
+  "sha256": "968df24b660e8d7d41d31961080ff91f64c653b4fc482680661d1152f4aadb22",
+  "size": 958683,
+  "requiresBundle": "1.2.0",
+  "notes": "Modo Equipe: trabalhe com sua equipe, cada um no seu computador, com permissões e escolha do que é compartilhado. Login do Mercado Livre sem localhost: o navegador devolve o login para o Ponte sozinho.",
+  "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
+  "publishedAt": "2026-10-17T15:01:31.638Z"
+}
