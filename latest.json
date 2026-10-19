@@ -1,10 +1,10 @@
 {
-  "version": "1.5.1",
-  "file": "app-1.5.1.asar",
-  "sha256": "176a79fadba83440b249232e8c6a51c428f95e97c1236b6cd12898e12a893484",
-  "size": 1266412,
+  "version": "1.6.0",
+  "file": "app-1.6.0.asar",
+  "sha256": "36ab7e9945d3ff9e3acb12c06f91a9e0fc432347aff48b46520284d12d570752",
+  "size": 1302069,
   "requiresBundle": "1.2.0",
-  "notes": "Prazo de disponibilidade: o Ponte agora desliga o Envio Flex sozinho quando um anúncio passa a ter prazo (exigência do Mercado Livre) e religa quando volta a ter estoque pronto. Nova opção na edição do anúncio: Estoque pronto x Prazo de disponibilidade.",
+  "notes": "Vários donos na equipe, escolha do computador principal, diagnóstico do celular, Ponte Servidor (sua VM no lugar do Supabase) com mudança da equipe em um clique, e prazo de disponibilidade de 1 a 60 dias.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-19T17:55:26.941Z"
+  "publishedAt": "2026-10-19T21:48:56.409Z"
 }

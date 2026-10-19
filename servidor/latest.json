@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "files": {
+    "app.mjs": "acbf44d90fb7c02b917c71752144f225712a130438f9ebe92e0c1037b4c64826",
+    "ponte-equipe.sql": "e3b77fa7922f39bfeb4a2f157131d2ada51a6f0abc7e79cd73241e6917c3d3f0"
+  },
+  "requiresSupervisor": "1.0.0",
+  "notes": "Primeira versão do Ponte Servidor.",
+  "publishedAt": "2026-10-19T21:50:39.778Z"
+}

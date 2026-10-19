@@ -86,13 +86,16 @@
     history.replaceState(null, '', location.pathname);
   })();
 
-  function api(path, body, auth) {
-    var h = { apikey: st.key, 'content-type': 'application/json' };
-    if (auth !== false && st.access) h.Authorization = 'Bearer ' + st.access;
-    return fetch(st.url + path, { method: 'POST', headers: h, body: JSON.stringify(body || {}) }).then(function (r) {
+  function apiAt(base, path, body, access) {
+    var h = { apikey: base.key, 'content-type': 'application/json' };
+    if (access) h.Authorization = 'Bearer ' + access;
+    return fetch(base.url + path, { method: 'POST', headers: h, body: JSON.stringify(body || {}) }).then(function (r) {
       return r.json().catch(function () { return null; }).then(function (j) { return { ok: r.ok, status: r.status, body: j }; });
-    });
+    }, function () { return { ok: false, status: 0, body: { message: 'Sem conexão com o servidor da equipe.' } }; });
   }
+  function api(path, body, auth) { return apiAt({ url: st.url, key: st.key }, path, body, auth !== false ? st.access : null); }
+  // id da pessoa dentro do token de acesso
+  function mySub() { try { var p = String(st.access || '').split('.')[1].replace(/-/g, '+').replace(/_/g, '/'); return JSON.parse(atob(p + '==='.slice((p.length + 3) % 4))).sub || null; } catch (e) { return null; } }
   function errText(j) { var m = (j && (j.message || j.msg || j.error_description || j.error)) || 'Erro'; if (/invalid login/i.test(m)) return 'E-mail ou senha incorretos.'; return m; }
   function refresh() {
     return api('/auth/v1/token?grant_type=refresh_token', { refresh_token: st.refresh }, false).then(function (r) {
@@ -123,15 +126,42 @@
   function poll() {
     clearTimeout(pollT);
     if (!st.access || !st.team) return;
-    Promise.all([rpc('ponte_get', { p_team: st.team, p_kind: 'mobile', p_key: 'snap' }), rpc('ponte_get', { p_team: st.team, p_kind: 'config', p_key: 'sharing' })]).then(function (res) {
+    Promise.all([rpc('ponte_get', { p_team: st.team, p_kind: 'mobile', p_key: 'snap' }), rpc('ponte_get', { p_team: st.team, p_kind: 'config', p_key: 'sharing' }),
+                 rpc('ponte_get', { p_team: st.team, p_kind: 'moved', p_key: 'all' }).catch(function () { return null; })]).then(function (res) {
       ui.lastErr = null;
       ui.snap = res[0] && res[0].data ? res[0].data : null;
+      ui.worker = res[0] ? res[0].worker || null : null;
       ui.me = res[0] && res[0].me ? res[0].me : (res[1] && res[1].me) || ui.me;
       ui.sharing = res[1] && res[1].data ? res[1].data : {};
+      var mv = res[2] && res[2].data;
+      ui.moved = mv && mv.url && mv.url.replace(/\/+$/, '') !== String(st.url).replace(/\/+$/, '') ? mv : null;
       render();
     }).catch(function (e) { ui.lastErr = e.message; render(); }).then(function () { pollT = setTimeout(poll, document.hidden ? 60000 : 15000); });
   }
   document.addEventListener('visibilitychange', function () { if (!document.hidden) poll(); });
+
+  // a equipe mudou de servidor: entra no novo (cria o cadastro se precisar) e usa o código desta pessoa
+  function followMove(pass) {
+    var mv = ui.moved, base = { url: mv.url.replace(/\/+$/, ''), key: mv.key };
+    var sub = mySub();
+    var tokP = sub ? rpc('ponte_get', { p_team: st.team, p_kind: 'moved', p_key: sub }).then(function (d) { return d && d.data ? d.data.token : null; }, function () { return null; }) : Promise.resolve(null);
+    return tokP.then(function (tok) {
+      return apiAt(base, '/auth/v1/token?grant_type=password', { email: st.email, password: pass }).then(function (r) {
+        if (r.ok) return r;
+        return apiAt(base, '/auth/v1/signup', { email: st.email, password: pass }).then(function (r2) {
+          if (!r2.ok || !r2.body || !r2.body.access_token) throw new Error(/already/i.test(errText(r2.body)) ? 'Você já tem cadastro no servidor novo, mas a senha não confere.' : errText(r2.body));
+          return r2;
+        });
+      }).then(function (r) {
+        var b = r.body;
+        var claim = tok ? apiAt(base, '/rest/v1/rpc/ponte_team_claim', { p_team: st.team, p_token: tok, p_name: (ui.me && ui.me.name) || null, p_email: st.email }, b.access_token).then(function (c) { if (!c.ok) throw new Error(errText(c.body)); }) : Promise.resolve();
+        return claim.then(function () {
+          st.url = base.url; st.key = base.key; st.access = b.access_token; st.refresh = b.refresh_token; st.exp = Date.now() + (b.expires_in || 3600) * 1000; save();
+          ui.moved = null; ui.snap = null;
+        });
+      });
+    });
+  }
 
   function visible(itemId) {
     if (!ui.me || ui.me.role === 'owner') return true;
@@ -177,7 +207,7 @@
       };
       return;
     }
-    var s = ui.snap;
+    var s = ui.moved ? null : ui.snap; // mudou de servidor: os dados antigos não valem mais
     var qs = s ? s.questions.filter(function (q) { return visible(q.itemId); }) : [];
     var orders = s ? s.orders.filter(function (o) { return o.items.some(function (i) { return visible(i.id); }); }) : [];
     var toBuy = orders.filter(function (o) { return o.meta.status === 'novo' && o.status !== 'cancelled'; });
@@ -185,7 +215,16 @@
     var online = age !== null && age < 10;
     var html = '<header><div style="width:34px">' + mark + '</div><h1>' + esc(st.teamName || 'Ponte') + '</h1><span class="status"><span class="dot ' + (online ? 'on' : '') + '"></span>' + (s ? (online ? 'loja online' : 'atualizado ' + ago(s.at)) : 'conectando…') + '</span></header><main>';
     if (ui.lastErr) html += '<div class="card small" style="color:var(--loss)">' + esc(ui.lastErr) + '</div>';
-    if (!s && !ui.lastErr) html += '<div class="empty">Esperando o computador da loja mandar os dados… Ele precisa estar com o Ponte aberto.</div>';
+    if (ui.moved) {
+      html += '<div class="card"><div class="t">A equipe mudou de servidor</div><p class="small muted">' + esc(ui.moved.by || 'O dono') + ' levou a equipe para um servidor novo. Digite sua senha para continuar (se ainda não tem cadastro lá, ele é criado agora com esta senha).</p>' +
+        '<input id="mvp" type="password" placeholder="Sua senha" autocomplete="current-password"><p id="mverr" class="small" style="color:var(--loss)"></p><div class="acts"><button class="btn main" id="mvgo">Continuar</button></div></div>';
+    }
+    if (!s && !ui.lastErr && !ui.moved) {
+      var w = ui.worker;
+      html += '<div class="empty"><b>Esperando o computador da loja mandar os dados…</b><br><br>' + (w && w.name
+        ? 'O computador principal da equipe é o de <b>' + esc(w.name) + '</b>' + (w.app ? ' (Ponte ' + esc(w.app) + ')' : '') + '. ' + (!w.app || /^1\.[0-5]\./.test(w.app) ? 'Ele está com uma versão antiga do Ponte: abra o Ponte nele e clique em <b>Reiniciar e atualizar</b>.' : 'Os dados chegam em até 1 minuto.')
+        : 'Nenhum computador da equipe está com o Ponte aberto agora. Abra o Ponte no computador principal (ou na VM) e espere 1 minuto.') + '</div>';
+    }
     if (s && ui.tab === 'perguntas') {
       if (!qs.length) html += '<div class="empty">Nenhuma pergunta esperando resposta. 🎉</div>';
       qs.forEach(function (q) {
@@ -218,9 +257,15 @@
       '<button class="' + (ui.tab === 'vendas' ? 'on' : '') + '" data-tab="vendas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Vendas' + (toBuy.length ? '<span class="badge">' + toBuy.length + '</span>' : '') + '</button>' +
       '<button class="' + (ui.tab === 'conta' ? 'on' : '') + '" data-tab="conta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Conta</button></nav>';
     var keep = {};
-    document.querySelectorAll('textarea[id^="a-"]').forEach(function (t) { keep[t.id] = t.value; });
+    document.querySelectorAll('textarea[id^="a-"],#mvp').forEach(function (t) { keep[t.id] = t.value; });
     app.innerHTML = html;
     Object.keys(keep).forEach(function (id) { var t = document.getElementById(id); if (t) t.value = keep[id]; });
+    var mvgo = $('#mvgo');
+    if (mvgo) mvgo.onclick = function () {
+      var b = this; b.disabled = true; b.textContent = 'Entrando…';
+      followMove($('#mvp').value).then(function () { toast('Pronto: o celular já usa o servidor novo.'); poll(); render(); })
+        .catch(function (e) { b.disabled = false; b.textContent = 'Continuar'; var el = $('#mverr'); if (el) el.textContent = e.message; });
+    };
   }
 
   document.addEventListener('input', function (e) { if (e.target.id && e.target.id.indexOf('a-') === 0) ui.drafts[e.target.id.slice(2)] = e.target.value; });

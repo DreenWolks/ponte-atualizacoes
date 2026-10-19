@@ -1,5 +1,5 @@
 // Ponte no celular: guarda a página para abrir rápido; os dados sempre vêm da internet
-const CACHE = 'ponte-app-v1';
+const CACHE = 'ponte-app-v2';
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['./', 'index.html', 'icon.png', 'manifest.webmanifest']))); self.skipWaiting(); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k))))); self.clients.claim(); });
 self.addEventListener('fetch', (e) => {
