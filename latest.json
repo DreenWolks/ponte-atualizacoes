@@ -1,10 +1,10 @@
 {
-  "version": "1.5.0",
-  "file": "app-1.5.0.asar",
-  "sha256": "2def126447da74b91b6e2b4f40f2a4510a65797d9959adf1be232adb7d2a5c29",
-  "size": 1256046,
+  "version": "1.5.1",
+  "file": "app-1.5.1.asar",
+  "sha256": "176a79fadba83440b249232e8c6a51c428f95e97c1236b6cd12898e12a893484",
+  "size": 1266412,
   "requiresBundle": "1.2.0",
-  "notes": "Novidades: Expedição com leitor de código de barras e etiquetas, Compras (pedidos a fornecedores), Financeiro com fluxo de caixa e repasses, pós-venda automático, preço automático, kits, respostas com IA, produtividade da equipe, turnos do alarme, app no celular e NF-e (Focus NFe).",
+  "notes": "Prazo de disponibilidade: o Ponte agora desliga o Envio Flex sozinho quando um anúncio passa a ter prazo (exigência do Mercado Livre) e religa quando volta a ter estoque pronto. Nova opção na edição do anúncio: Estoque pronto x Prazo de disponibilidade.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-19T17:32:54.972Z"
+  "publishedAt": "2026-10-19T17:55:26.941Z"
 }
