@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1626">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Ponte</title>
+<style>
+  :root { --bg:#0f1626; --surface:#151f35; --raised:#1b2741; --raised2:#223050; --line:#27355a; --soft:#1f2b47; --text:#e6eaf3; --text2:#b8c1d6; --muted:#8692ae; --sale:#f2b33d; --saleInk:#2a1e05; --supply:#3cc8b4; --supplyInk:#042420; --gain:#67d897; --loss:#ff7b6b; }
+  @media (prefers-color-scheme: light) { :root { --bg:#eef1f7; --surface:#fff; --raised:#f5f7fb; --raised2:#eaeef6; --line:#d8dfeb; --soft:#e5eaf2; --text:#172036; --text2:#36425e; --muted:#5f6b86; --sale:#b97a06; --saleInk:#fff8e8; --supply:#0b8f7f; --supplyInk:#f0fffc; --gain:#148a4b; --loss:#cf4535; } }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  body { padding: env(safe-area-inset-top) 0 calc(72px + env(safe-area-inset-bottom)); min-height: 100vh; }
+  header { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--soft); }
+  header svg { width: 34px; height: 24px; }
+  header h1 { font-size: 18px; margin: 0; flex: 1; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); display: inline-block; }
+  .dot.on { background: var(--gain); }
+  .status { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  main { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .card { background: var(--surface); border: 1px solid var(--soft); border-radius: 16px; padding: 14px; }
+  .row { display: flex; gap: 10px; align-items: center; }
+  .thumb { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; background: var(--raised2); flex: none; }
+  .t { font-weight: 600; }
+  .muted { color: var(--muted); } .small { font-size: 13px; }
+  .ell { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .q { margin: 10px 0; padding: 10px 12px; background: var(--raised); border-radius: 12px; }
+  textarea, input { width: 100%; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+  textarea { min-height: 96px; resize: vertical; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--raised); color: var(--text); font: 600 15px system-ui, sans-serif; text-decoration: none; cursor: pointer; }
+  .btn.main { background: var(--sale); color: var(--saleInk); border-color: transparent; }
+  .btn.sup { background: var(--supply); color: var(--supplyInk); border-color: transparent; }
+  .btn.block { width: 100%; }
+  .btn[disabled] { opacity: .55; }
+  .acts { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .acts .btn { flex: 1; }
+  .chip { display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 99px; font-size: 12px; font-weight: 600; background: var(--raised2); color: var(--text2); }
+  .chip.sale { background: color-mix(in srgb, var(--sale) 18%, transparent); color: var(--sale); }
+  .chip.gain { background: color-mix(in srgb, var(--gain) 16%, transparent); color: var(--gain); }
+  nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; display: grid; grid-template-columns: repeat(3, 1fr); background: var(--surface); border-top: 1px solid var(--soft); padding-bottom: env(safe-area-inset-bottom); }
+  nav button { height: 62px; border: 0; background: transparent; color: var(--muted); font: 600 12px system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; position: relative; }
+  nav button.on { color: var(--sale); }
+  nav button svg { width: 22px; height: 22px; }
+  nav .badge { position: absolute; top: 8px; left: calc(50% + 6px); min-width: 18px; height: 18px; border-radius: 99px; background: var(--loss); color: #fff; font-size: 11px; display: grid; place-items: center; padding: 0 5px; }
+  .seg { display: flex; gap: 4px; background: var(--raised); border-radius: 12px; padding: 4px; }
+  .seg button { flex: 1; height: 36px; border: 0; border-radius: 9px; background: transparent; color: var(--text2); font: 600 13px system-ui, sans-serif; }
+  .seg button.on { background: var(--surface); color: var(--text); }
+  .empty { text-align: center; padding: 40px 10px; color: var(--muted); }
+  .toast { position: fixed; left: 16px; right: 16px; bottom: calc(80px + env(safe-area-inset-bottom)); background: var(--raised2); color: var(--text); padding: 12px 14px; border-radius: 12px; z-index: 9; box-shadow: 0 8px 30px rgba(0,0,0,.35); }
+  .addr { font-size: 13px; color: var(--text2); background: var(--raised); border-radius: 10px; padding: 8px 10px; margin-top: 8px; }
+  label { display: block; font-size: 13px; color: var(--muted); margin: 10px 0 4px; }
+  .login { max-width: 420px; margin: 40px auto; padding: 0 16px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var KEY = 'ponte-mobile';
+  var st = load();
+  var ui = { tab: 'perguntas', ordersTab: 'novo', snap: null, sharing: null, me: null, busy: {}, drafts: {}, lastErr: null };
+  function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { /* sem armazenamento */ } }
+  var $ = function (s) { return document.querySelector(s); };
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function brl(v) { return (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
+  function ago(iso) { var m = Math.round((Date.now() - new Date(iso).getTime()) / 60000); if (m < 1) return 'agora'; if (m < 60) return 'há ' + m + ' min'; var h = Math.round(m / 60); if (h < 24) return 'há ' + h + ' h'; var d = Math.round(h / 24); return 'há ' + d + (d === 1 ? ' dia' : ' dias'); }
+  function toast(msg) { var t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(function () { t.remove(); }, 3500); }
+  var mark = '<svg viewBox="0 0 120 80"><path d="M22 58 C 34 6, 86 6, 98 58" fill="none" stroke="#f2b33d" stroke-width="9" stroke-linecap="round"/><circle cx="22" cy="58" r="11" fill="none" stroke="#f2b33d" stroke-width="9"/><circle cx="98" cy="58" r="11" fill="none" stroke="#3cc8b4" stroke-width="9"/></svg>';
+
+  // convite/ligação vinda do QR code: #c=<base64>
+  (function () {
+    var m = location.hash.match(/c=([A-Za-z0-9_-]+)/);
+    if (!m) return;
+    try {
+      var b = m[1].replace(/-/g, '+').replace(/_/g, '/');
+      var j = JSON.parse(decodeURIComponent(escape(atob(b + '==='.slice((b.length + 3) % 4)))));
+      if (j.u && j.k && j.t) { st.url = j.u; st.key = j.k; st.team = j.t; st.teamName = j.n || ''; save(); }
+    } catch (e) { /* link inválido */ }
+    history.replaceState(null, '', location.pathname);
+  })();
+
+  function api(path, body, auth) {
+    var h = { apikey: st.key, 'content-type': 'application/json' };
+    if (auth !== false && st.access) h.Authorization = 'Bearer ' + st.access;
+    return fetch(st.url + path, { method: 'POST', headers: h, body: JSON.stringify(body || {}) }).then(function (r) {
+      return r.json().catch(function () { return null; }).then(function (j) { return { ok: r.ok, status: r.status, body: j }; });
+    });
+  }
+  function errText(j) { var m = (j && (j.message || j.msg || j.error_description || j.error)) || 'Erro'; if (/invalid login/i.test(m)) return 'E-mail ou senha incorretos.'; return m; }
+  function refresh() {
+    return api('/auth/v1/token?grant_type=refresh_token', { refresh_token: st.refresh }, false).then(function (r) {
+      if (!r.ok) { st.access = null; save(); render(); throw new Error('Entre de novo.'); }
+      st.access = r.body.access_token; st.refresh = r.body.refresh_token; st.exp = Date.now() + (r.body.expires_in || 3600) * 1000; save();
+    });
+  }
+  function rpc(fn, args) {
+    var go = function () { return api('/rest/v1/rpc/' + fn, args); };
+    var pre = st.exp && Date.now() > st.exp - 60000 ? refresh() : Promise.resolve();
+    return pre.then(go).then(function (r) {
+      if (r.status === 401) return refresh().then(go);
+      return r;
+    }).then(function (r) {
+      if (!r.ok) throw new Error(errText(r.body));
+      return r.body;
+    });
+  }
+
+  function login(email, pass) {
+    return api('/auth/v1/token?grant_type=password', { email: email, password: pass }, false).then(function (r) {
+      if (!r.ok) throw new Error(errText(r.body));
+      st.access = r.body.access_token; st.refresh = r.body.refresh_token; st.exp = Date.now() + (r.body.expires_in || 3600) * 1000; st.email = email; save();
+    });
+  }
+
+  var pollT = null;
+  function poll() {
+    clearTimeout(pollT);
+    if (!st.access || !st.team) return;
+    Promise.all([rpc('ponte_get', { p_team: st.team, p_kind: 'mobile', p_key: 'snap' }), rpc('ponte_get', { p_team: st.team, p_kind: 'config', p_key: 'sharing' })]).then(function (res) {
+      ui.lastErr = null;
+      ui.snap = res[0] && res[0].data ? res[0].data : null;
+      ui.me = res[0] && res[0].me ? res[0].me : (res[1] && res[1].me) || ui.me;
+      ui.sharing = res[1] && res[1].data ? res[1].data : {};
+      render();
+    }).catch(function (e) { ui.lastErr = e.message; render(); }).then(function () { pollT = setTimeout(poll, document.hidden ? 60000 : 15000); });
+  }
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) poll(); });
+
+  function visible(itemId) {
+    if (!ui.me || ui.me.role === 'owner') return true;
+    var l = (ui.sharing || {}).listings || {};
+    return l.mode !== 'selected' || (l.ids || []).map(String).indexOf(String(itemId)) >= 0;
+  }
+  function can(p) { return !ui.me || ui.me.role === 'owner' || !!(ui.me.perms || {})[p]; }
+
+  function command(cmd) {
+    var key = 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    cmd.status = 'pending'; cmd.byName = (ui.me && ui.me.name) || st.email; cmd.at = new Date().toISOString();
+    return rpc('ponte_put', { p_team: st.team, p_kind: 'cmd', p_key: key, p_data: cmd }).then(function () {
+      var tries = 0;
+      return new Promise(function (resolve, reject) {
+        (function check() {
+          rpc('ponte_get', { p_team: st.team, p_kind: 'cmd', p_key: key }).then(function (d) {
+            var s = d && d.data && d.data.status;
+            if (s === 'done') return resolve(d.data);
+            if (s === 'error') return reject(new Error(d.data.error || 'Não deu certo.'));
+            if (++tries > 40) return reject(new Error('O computador da loja não respondeu. Ele está ligado com o Ponte aberto?'));
+            setTimeout(check, 1500);
+          }).catch(reject);
+        })();
+      });
+    });
+  }
+
+  function render() {
+    var app = $('#app');
+    if (!st.url || !st.key || !st.team) {
+      app.innerHTML = '<div class="login">' + mark + '<h1>Ponte no celular</h1><p class="muted">Abra o Ponte no computador, vá em <b>Equipe → Ponte no celular</b> e aponte a câmera para o código.</p></div>';
+      return;
+    }
+    if (!st.access) {
+      app.innerHTML = '<div class="login"><div style="width:72px">' + mark + '</div><h1>' + esc(st.teamName || 'Ponte') + '</h1><p class="muted">Entre com o e-mail e a senha que você usa na equipe do Ponte.</p>' +
+        '<label>E-mail</label><input id="em" type="email" autocomplete="username" value="' + esc(st.email || '') + '">' +
+        '<label>Senha</label><input id="pw" type="password" autocomplete="current-password">' +
+        '<p id="lerr" class="small" style="color:var(--loss)"></p><button class="btn main block" id="go">Entrar</button></div>';
+      $('#go').onclick = function () {
+        this.disabled = true;
+        var b = this;
+        login($('#em').value.trim(), $('#pw').value).then(function () { poll(); render(); }).catch(function (e) { $('#lerr').textContent = e.message; b.disabled = false; });
+      };
+      return;
+    }
+    var s = ui.snap;
+    var qs = s ? s.questions.filter(function (q) { return visible(q.itemId); }) : [];
+    var orders = s ? s.orders.filter(function (o) { return o.items.some(function (i) { return visible(i.id); }); }) : [];
+    var toBuy = orders.filter(function (o) { return o.meta.status === 'novo' && o.status !== 'cancelled'; });
+    var age = s && s.at ? (Date.now() - new Date(s.at).getTime()) / 60000 : null;
+    var online = age !== null && age < 10;
+    var html = '<header><div style="width:34px">' + mark + '</div><h1>' + esc(st.teamName || 'Ponte') + '</h1><span class="status"><span class="dot ' + (online ? 'on' : '') + '"></span>' + (s ? (online ? 'loja online' : 'atualizado ' + ago(s.at)) : 'conectando…') + '</span></header><main>';
+    if (ui.lastErr) html += '<div class="card small" style="color:var(--loss)">' + esc(ui.lastErr) + '</div>';
+    if (!s && !ui.lastErr) html += '<div class="empty">Esperando o computador da loja mandar os dados… Ele precisa estar com o Ponte aberto.</div>';
+    if (s && ui.tab === 'perguntas') {
+      if (!qs.length) html += '<div class="empty">Nenhuma pergunta esperando resposta. 🎉</div>';
+      qs.forEach(function (q) {
+        html += '<div class="card"><div class="row">' + (q.thumb ? '<img class="thumb" src="' + esc(q.thumb) + '" alt="">' : '<div class="thumb"></div>') + '<div style="min-width:0;flex:1"><div class="t ell">' + esc(q.itemTitle) + '</div><div class="small muted">' + (q.price != null ? brl(q.price) + ' · ' : '') + esc(q.acc || '') + ' · ' + ago(q.date) + '</div></div></div>' +
+          '<div class="q">“' + esc(q.text) + '”</div>' +
+          (can('atendimento') ? '<textarea id="a-' + esc(q.id) + '" placeholder="Escreva a resposta…">' + esc(ui.drafts[q.id] || '') + '</textarea><div class="acts"><button class="btn main" data-ans="' + esc(q.id) + '"' + (ui.busy[q.id] ? ' disabled' : '') + '>' + (ui.busy[q.id] ? 'Enviando…' : 'Responder') + '</button></div>' : '<div class="small muted">Sem permissão para responder.</div>') + '</div>';
+      });
+    }
+    if (s && ui.tab === 'vendas') {
+      html += '<div class="seg"><button class="' + (ui.ordersTab === 'novo' ? 'on' : '') + '" data-ot="novo">A comprar (' + toBuy.length + ')</button><button class="' + (ui.ordersTab === 'todas' ? 'on' : '') + '" data-ot="todas">Todas</button></div>';
+      var list = ui.ordersTab === 'novo' ? toBuy : orders;
+      if (!list.length) html += '<div class="empty">Nada por aqui.</div>';
+      list.slice(0, 60).forEach(function (o) {
+        var i0 = o.items[0] || {};
+        html += '<div class="card"><div class="row">' + (i0.thumb ? '<img class="thumb" src="' + esc(i0.thumb) + '" alt="">' : '<div class="thumb"></div>') + '<div style="min-width:0;flex:1"><div class="t ell">' + esc(i0.title) + '</div><div class="small muted">' + o.items.map(function (i) { return i.qty + '× ' + (i.variation ? esc(i.variation) : ''); }).join(' + ') + ' · ' + esc(o.buyer) + ' · ' + ago(o.date) + '</div></div>' +
+          '<span class="chip ' + (o.meta.status === 'novo' ? 'sale' : 'gain') + '">' + ({ novo: 'A comprar', comprado: 'Comprado', enviado: 'Enviado', entregue: 'Entregue', problema: 'Problema' }[o.meta.status] || o.meta.status) + '</span></div>' +
+          (o.meta.statusBy ? '<div class="small muted" style="margin-top:6px">por ' + esc(o.meta.statusBy) + '</div>' : '') +
+          (o.addr ? '<div class="addr"><b>' + esc(o.addr.name) + '</b><br>' + esc(o.addr.line) + '<br>' + esc(o.addr.city) + ' · CEP ' + esc(o.addr.zip) + '</div>' : '') +
+          '<div class="acts">' + (o.link ? '<a class="btn sup" href="' + esc(o.link.url) + '" target="_blank" rel="noopener">Comprar' + (o.link.label ? ' no ' + esc(o.link.label) : '') + '</a>' : '') +
+          (o.addr ? '<button class="btn" data-copy="' + esc(o.id) + '">Copiar endereço</button>' : '') +
+          (o.meta.status === 'novo' && can('pedidos') ? '<button class="btn main" data-buy="' + esc(o.id) + '"' + (ui.busy[o.id] ? ' disabled' : '') + '>' + (ui.busy[o.id] ? '…' : 'Marcar comprado') + '</button>' : '') + '</div></div>';
+      });
+    }
+    if (ui.tab === 'conta') {
+      html += '<div class="card"><div class="t">' + esc((ui.me && ui.me.name) || st.email) + '</div><div class="small muted">' + esc(st.email || '') + ' · ' + (ui.me && ui.me.role === 'owner' ? 'Dono' : 'Equipe') + '</div>' +
+        '<p class="small muted">Dica: no navegador do celular, use “Adicionar à tela inicial” para abrir o Ponte como um app.</p><button class="btn block" id="out">Sair</button></div>';
+    }
+    html += '</main><nav>' +
+      '<button class="' + (ui.tab === 'perguntas' ? 'on' : '') + '" data-tab="perguntas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Perguntas' + (qs.length ? '<span class="badge">' + qs.length + '</span>' : '') + '</button>' +
+      '<button class="' + (ui.tab === 'vendas' ? 'on' : '') + '" data-tab="vendas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Vendas' + (toBuy.length ? '<span class="badge">' + toBuy.length + '</span>' : '') + '</button>' +
+      '<button class="' + (ui.tab === 'conta' ? 'on' : '') + '" data-tab="conta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Conta</button></nav>';
+    var keep = {};
+    document.querySelectorAll('textarea[id^="a-"]').forEach(function (t) { keep[t.id] = t.value; });
+    app.innerHTML = html;
+    Object.keys(keep).forEach(function (id) { var t = document.getElementById(id); if (t) t.value = keep[id]; });
+  }
+
+  document.addEventListener('input', function (e) { if (e.target.id && e.target.id.indexOf('a-') === 0) ui.drafts[e.target.id.slice(2)] = e.target.value; });
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-tab],[data-ot],[data-ans],[data-buy],[data-copy],#out');
+    if (!t) return;
+    if (t.dataset.tab) { ui.tab = t.dataset.tab; render(); window.scrollTo(0, 0); return; }
+    if (t.dataset.ot) { ui.ordersTab = t.dataset.ot; render(); return; }
+    if (t.id === 'out') { st.access = null; st.refresh = null; save(); render(); return; }
+    if (t.dataset.copy) {
+      var o = ui.snap.orders.find(function (x) { return x.id === t.dataset.copy; });
+      var txt = o.addr.name + '\n' + o.addr.line + '\n' + o.addr.city + '\nCEP ' + o.addr.zip;
+      (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { toast('Endereço copiado.'); }).catch(function () { toast(txt); });
+      return;
+    }
+    if (t.dataset.ans) {
+      var id = t.dataset.ans;
+      var text = (document.getElementById('a-' + id) || {}).value || '';
+      if (!text.trim()) { toast('Escreva a resposta.'); return; }
+      ui.busy[id] = true; render();
+      command({ type: 'answer', qid: id, text: text.trim() }).then(function () {
+        toast('Resposta publicada no Mercado Livre.');
+        ui.snap.questions = ui.snap.questions.filter(function (q) { return q.id !== id; });
+        delete ui.drafts[id];
+      }).catch(function (err) { toast(err.message); }).then(function () { delete ui.busy[id]; render(); });
+      return;
+    }
+    if (t.dataset.buy) {
+      var oid = t.dataset.buy;
+      ui.busy[oid] = true; render();
+      command({ type: 'status', orderId: oid, orderStatus: 'comprado' }).then(function () {
+        toast('Venda marcada como comprada.');
+        var o = ui.snap.orders.find(function (x) { return x.id === oid; }); if (o) o.meta.status = 'comprado';
+      }).catch(function (err) { toast(err.message); }).then(function () { delete ui.busy[oid]; render(); });
+    }
+  });
+
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () { /* sem cache offline */ });
+  render();
+  poll();
+})();
+</script>
+</body>
+</html>
