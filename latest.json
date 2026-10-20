@@ -1,10 +1,10 @@
 {
-  "version": "1.6.1",
-  "file": "app-1.6.1.asar",
-  "sha256": "3b2606ad366ea024032b1b280367b5e9a9ab248a9e97c8c2efd47b15a47c2549",
-  "size": 1302407,
+  "version": "1.7.0",
+  "file": "app-1.7.0.asar",
+  "sha256": "2906b31f0e2f0486b9f4ac43c5be771c4e5b6613cf2674db2f2629569716d510",
+  "size": 1331559,
   "requiresBundle": "1.2.0",
-  "notes": "Vários donos na equipe, escolha do computador principal, diagnóstico do celular, Ponte Servidor (sua VM no lugar do Supabase) com mudança da equipe em um clique, e prazo de disponibilidade de 1 a 60 dias.",
+  "notes": "Celular completo: vendas com fornecedores e lucro, compras por fornecedor, atendimento com IA e mensagens, anúncios e estoque, e notificações no celular.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-19T21:56:52.976Z"
+  "publishedAt": "2026-10-20T19:50:46.738Z"
 }

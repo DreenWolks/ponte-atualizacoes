@@ -1,10 +1,10 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "files": {
     "app.mjs": "acbf44d90fb7c02b917c71752144f225712a130438f9ebe92e0c1037b4c64826",
-    "ponte-equipe.sql": "e3b77fa7922f39bfeb4a2f157131d2ada51a6f0abc7e79cd73241e6917c3d3f0"
+    "ponte-equipe.sql": "a6a6337dd6e920c2159088ccd13d7288c482bfaadcc693c1f30afd61a5b17cde"
   },
   "requiresSupervisor": "1.0.0",
-  "notes": "Primeira versão do Ponte Servidor.",
-  "publishedAt": "2026-10-19T21:50:39.778Z"
+  "notes": "Banco da equipe versão 5: celular completo e notificações.",
+  "publishedAt": "2026-10-20T19:45:06.711Z"
 }

@@ -1,12 +1,35 @@
 {
   "name": "Ponte",
   "short_name": "Ponte",
-  "description": "Perguntas e vendas do Mercado Livre no celular",
-  "start_url": "./",
+  "description": "Vendas, fornecedores, atendimento e estoque do Mercado Livre no celular",
+  "start_url": "./#inicio",
   "scope": "./",
   "display": "standalone",
   "background_color": "#0f1626",
   "theme_color": "#0f1626",
   "lang": "pt-BR",
-  "icons": [{ "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }]
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "id": "./",
+  "orientation": "portrait",
+  "shortcuts": [
+    {
+      "name": "A comprar",
+      "url": "./#vendas"
+    },
+    {
+      "name": "Perguntas",
+      "url": "./#perguntas"
+    },
+    {
+      "name": "Estoque",
+      "url": "./#anuncios"
+    }
+  ]
 }

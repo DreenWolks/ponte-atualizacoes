@@ -9,52 +9,111 @@
 <link rel="icon" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ponte">
 <title>Ponte</title>
 <style>
-  :root { --bg:#0f1626; --surface:#151f35; --raised:#1b2741; --raised2:#223050; --line:#27355a; --soft:#1f2b47; --text:#e6eaf3; --text2:#b8c1d6; --muted:#8692ae; --sale:#f2b33d; --saleInk:#2a1e05; --supply:#3cc8b4; --supplyInk:#042420; --gain:#67d897; --loss:#ff7b6b; }
-  @media (prefers-color-scheme: light) { :root { --bg:#eef1f7; --surface:#fff; --raised:#f5f7fb; --raised2:#eaeef6; --line:#d8dfeb; --soft:#e5eaf2; --text:#172036; --text2:#36425e; --muted:#5f6b86; --sale:#b97a06; --saleInk:#fff8e8; --supply:#0b8f7f; --supplyInk:#f0fffc; --gain:#148a4b; --loss:#cf4535; } }
+  :root { --bg:#0f1626; --surface:#151f35; --raised:#1b2741; --raised2:#223050; --line:#27355a; --soft:#1f2b47; --text:#e6eaf3; --text2:#b8c1d6; --muted:#8692ae; --sale:#f2b33d; --saleInk:#2a1e05; --supply:#3cc8b4; --supplyInk:#042420; --gain:#67d897; --loss:#ff7b6b; --warn:#f2b33d; }
+  @media (prefers-color-scheme: light) { :root { --bg:#eef1f7; --surface:#fff; --raised:#f5f7fb; --raised2:#eaeef6; --line:#d8dfeb; --soft:#e5eaf2; --text:#172036; --text2:#36425e; --muted:#5f6b86; --sale:#b97a06; --saleInk:#fff8e8; --supply:#0b8f7f; --supplyInk:#f0fffc; --gain:#148a4b; --loss:#cf4535; --warn:#b97a06; } }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
   body { padding: env(safe-area-inset-top) 0 calc(72px + env(safe-area-inset-bottom)); min-height: 100vh; }
-  header { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--soft); }
-  header svg { width: 34px; height: 24px; }
-  header h1 { font-size: 18px; margin: 0; flex: 1; }
-  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); display: inline-block; }
+  header { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 10px; padding: 10px 16px; min-height: 54px; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--soft); }
+  header .logo { width: 34px; height: 24px; flex: none; }
+  header h1 { font-size: 18px; margin: 0; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  header .back { width: 40px; height: 40px; margin-left: -8px; border: 0; background: transparent; color: var(--text); display: grid; place-items: center; border-radius: 10px; flex: none; }
+  header .back svg { width: 24px; height: 24px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); display: inline-block; flex: none; }
   .dot.on { background: var(--gain); }
-  .status { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
-  main { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .status { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; flex: none; }
+  main { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; max-width: 760px; margin: 0 auto; }
   .card { background: var(--surface); border: 1px solid var(--soft); border-radius: 16px; padding: 14px; }
+  .card.tap { cursor: pointer; }
+  .card.tap:active { background: var(--raised); }
   .row { display: flex; gap: 10px; align-items: center; }
+  .grow { flex: 1; min-width: 0; }
   .thumb { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; background: var(--raised2); flex: none; }
+  .thumb.sm { width: 38px; height: 38px; border-radius: 8px; }
   .t { font-weight: 600; }
-  .muted { color: var(--muted); } .small { font-size: 13px; }
+  .muted { color: var(--muted); } .small { font-size: 13px; } .xs { font-size: 12px; }
   .ell { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .clamp2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .num { font-variant-numeric: tabular-nums; }
+  .gain { color: var(--gain); } .loss { color: var(--loss); } .warn { color: var(--warn); }
   .q { margin: 10px 0; padding: 10px 12px; background: var(--raised); border-radius: 12px; }
-  textarea, input { width: 100%; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+  textarea, input, select { width: 100%; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 11px 12px; }
+  select { appearance: none; -webkit-appearance: none; }
   textarea { min-height: 96px; resize: vertical; }
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--raised); color: var(--text); font: 600 15px system-ui, sans-serif; text-decoration: none; cursor: pointer; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--raised); color: var(--text); font: 600 15px system-ui, sans-serif; text-decoration: none; cursor: pointer; white-space: nowrap; }
+  .btn.sm { min-height: 36px; font-size: 13px; padding: 0 11px; border-radius: 10px; }
   .btn.main { background: var(--sale); color: var(--saleInk); border-color: transparent; }
   .btn.sup { background: var(--supply); color: var(--supplyInk); border-color: transparent; }
+  .btn.ghost { background: transparent; }
+  .btn.danger { color: var(--loss); }
   .btn.block { width: 100%; }
   .btn[disabled] { opacity: .55; }
+  .btn svg { width: 17px; height: 17px; }
   .acts { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
   .acts .btn { flex: 1; }
-  .chip { display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 99px; font-size: 12px; font-weight: 600; background: var(--raised2); color: var(--text2); }
+  .chip { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 99px; font-size: 12px; font-weight: 600; background: var(--raised2); color: var(--text2); white-space: nowrap; }
   .chip.sale { background: color-mix(in srgb, var(--sale) 18%, transparent); color: var(--sale); }
+  .chip.sup { background: color-mix(in srgb, var(--supply) 18%, transparent); color: var(--supply); }
   .chip.gain { background: color-mix(in srgb, var(--gain) 16%, transparent); color: var(--gain); }
-  nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; display: grid; grid-template-columns: repeat(3, 1fr); background: var(--surface); border-top: 1px solid var(--soft); padding-bottom: env(safe-area-inset-bottom); }
-  nav button { height: 62px; border: 0; background: transparent; color: var(--muted); font: 600 12px system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; position: relative; }
+  .chip.loss { background: color-mix(in srgb, var(--loss) 16%, transparent); color: var(--loss); }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; display: grid; grid-template-columns: repeat(5, 1fr); background: var(--surface); border-top: 1px solid var(--soft); padding-bottom: env(safe-area-inset-bottom); }
+  nav button { height: 60px; border: 0; background: transparent; color: var(--muted); font: 600 11px system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; position: relative; }
   nav button.on { color: var(--sale); }
   nav button svg { width: 22px; height: 22px; }
-  nav .badge { position: absolute; top: 8px; left: calc(50% + 6px); min-width: 18px; height: 18px; border-radius: 99px; background: var(--loss); color: #fff; font-size: 11px; display: grid; place-items: center; padding: 0 5px; }
-  .seg { display: flex; gap: 4px; background: var(--raised); border-radius: 12px; padding: 4px; }
-  .seg button { flex: 1; height: 36px; border: 0; border-radius: 9px; background: transparent; color: var(--text2); font: 600 13px system-ui, sans-serif; }
-  .seg button.on { background: var(--surface); color: var(--text); }
-  .empty { text-align: center; padding: 40px 10px; color: var(--muted); }
-  .toast { position: fixed; left: 16px; right: 16px; bottom: calc(80px + env(safe-area-inset-bottom)); background: var(--raised2); color: var(--text); padding: 12px 14px; border-radius: 12px; z-index: 9; box-shadow: 0 8px 30px rgba(0,0,0,.35); }
-  .addr { font-size: 13px; color: var(--text2); background: var(--raised); border-radius: 10px; padding: 8px 10px; margin-top: 8px; }
+  nav .badge { position: absolute; top: 6px; left: calc(50% + 5px); min-width: 18px; height: 18px; border-radius: 99px; background: var(--loss); color: #fff; font-size: 11px; display: grid; place-items: center; padding: 0 5px; }
+  .seg { display: flex; gap: 4px; background: var(--raised); border-radius: 12px; padding: 4px; overflow-x: auto; scrollbar-width: none; }
+  .seg::-webkit-scrollbar { display: none; }
+  .seg button { flex: 1 0 auto; height: 36px; border: 0; border-radius: 9px; background: transparent; color: var(--text2); font: 600 13px system-ui, sans-serif; padding: 0 10px; white-space: nowrap; }
+  .seg button.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+  .empty { text-align: center; padding: 36px 10px; color: var(--muted); }
+  .toast { position: fixed; left: 16px; right: 16px; bottom: calc(76px + env(safe-area-inset-bottom)); background: var(--raised2); color: var(--text); padding: 12px 14px; border-radius: 12px; z-index: 9; box-shadow: 0 8px 30px rgba(0,0,0,.35); max-width: 728px; margin: 0 auto; }
+  .toast.err { border-left: 4px solid var(--loss); }
+  .addr { font-size: 14px; color: var(--text2); background: var(--raised); border-radius: 10px; padding: 10px 12px; margin-top: 8px; line-height: 1.5; }
   label { display: block; font-size: 13px; color: var(--muted); margin: 10px 0 4px; }
   .login { max-width: 420px; margin: 40px auto; padding: 0 16px; }
+  .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tile { background: var(--surface); border: 1px solid var(--soft); border-radius: 16px; padding: 12px 14px; cursor: pointer; }
+  .tile .k { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .tile .v { font-size: 22px; font-weight: 700; margin-top: 2px; }
+  .tile .s { font-size: 12px; color: var(--muted); }
+  .tile.alert .v { color: var(--loss); }
+  .tile.hot .v { color: var(--sale); }
+  h2.sec { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 8px 2px 0; }
+  .search { position: relative; }
+  .search input { padding-left: 38px; }
+  .search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--muted); }
+  .kv { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--soft); font-size: 14px; }
+  .kv:last-child { border-bottom: 0; }
+  .kv b { font-weight: 600; }
+  .sup-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--soft); }
+  .sup-row:last-child { border-bottom: 0; }
+  .steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .steps button { min-height: 42px; border-radius: 10px; border: 1px solid var(--line); background: var(--raised); color: var(--text2); font: 600 12px system-ui, sans-serif; padding: 0 2px; }
+  .steps button.on { background: var(--sale); color: var(--saleInk); border-color: transparent; }
+  .bubbles { display: flex; flex-direction: column; gap: 8px; }
+  .bubble { max-width: 84%; padding: 9px 12px; border-radius: 14px; background: var(--raised); white-space: pre-wrap; word-wrap: break-word; }
+  .bubble.me { align-self: flex-end; background: color-mix(in srgb, var(--supply) 22%, var(--surface)); }
+  .bubble .when { display: block; font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .stepper { display: flex; align-items: center; gap: 6px; }
+  .stepper input { width: 84px; text-align: center; padding: 9px 6px; }
+  .stepper .btn { min-width: 44px; padding: 0; }
+  .sw { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--soft); }
+  .sw:last-child { border-bottom: 0; }
+  .sw input { width: 46px; height: 26px; appearance: none; -webkit-appearance: none; background: var(--raised2); border-radius: 99px; position: relative; border: 0; padding: 0; flex: none; }
+  .sw input::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform .15s; }
+  .sw input:checked { background: var(--supply); }
+  .sw input:checked::after { transform: translateX(20px); }
+  .spin { width: 22px; height: 22px; border: 3px solid var(--raised2); border-top-color: var(--sale); border-radius: 50%; animation: sp .8s linear infinite; margin: 20px auto; }
+  @keyframes sp { to { transform: rotate(360deg); } }
+  .banner { background: color-mix(in srgb, var(--sale) 14%, var(--surface)); border: 1px solid color-mix(in srgb, var(--sale) 40%, transparent); border-radius: 14px; padding: 12px 14px; font-size: 14px; }
+  .banner.err { background: color-mix(in srgb, var(--loss) 12%, var(--surface)); border-color: color-mix(in srgb, var(--loss) 40%, transparent); }
+  .group-h { display: flex; align-items: center; gap: 8px; }
+  a { color: var(--supply); }
 </style>
 </head>
 <body>
@@ -64,28 +123,55 @@
   'use strict';
   var KEY = 'ponte-mobile';
   var st = load();
-  var ui = { tab: 'perguntas', ordersTab: 'novo', snap: null, sharing: null, me: null, busy: {}, drafts: {}, lastErr: null };
+  var ui = { snap: null, me: null, worker: null, moved: null, busy: {}, drafts: {}, lastErr: null, vkey: null, vtried: 0, msgs: {}, filters: { vendas: 'novo', q: '', anuncios: 'todos', aq: '', at: 'perguntas', es: 'anuncios' }, pending: false, loaded: false };
   function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { /* sem armazenamento */ } }
+  function saveSnap() { try { localStorage.setItem(KEY + '-snap', JSON.stringify({ key: ui.vkey, version: ui.snapVer, team: st.team, url: st.url, snap: ui.snap })); } catch (e) { /* cheio */ } }
+  (function () { try { var c = JSON.parse(localStorage.getItem(KEY + '-snap')); if (c && c.team === st.team && c.url === st.url) { ui.snap = c.snap; ui.vkey = c.key; ui.snapVer = c.version; } } catch (e) { /* sem cópia */ } })();
   var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function num(v) { if (v === null || v === undefined || v === '') return 0; if (typeof v === 'number') return v; var s = String(v).trim().replace(/\s|R\$|US\$/g, ''); if (s.indexOf(',') >= 0) s = s.replace(/\./g, '').replace(',', '.'); var n = parseFloat(s); return isFinite(n) ? n : 0; }
   function brl(v) { return (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
-  function ago(iso) { var m = Math.round((Date.now() - new Date(iso).getTime()) / 60000); if (m < 1) return 'agora'; if (m < 60) return 'há ' + m + ' min'; var h = Math.round(m / 60); if (h < 24) return 'há ' + h + ' h'; var d = Math.round(h / 24); return 'há ' + d + (d === 1 ? ' dia' : ' dias'); }
-  function toast(msg) { var t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(function () { t.remove(); }, 3500); }
-  var mark = '<svg viewBox="0 0 120 80"><path d="M22 58 C 34 6, 86 6, 98 58" fill="none" stroke="#f2b33d" stroke-width="9" stroke-linecap="round"/><circle cx="22" cy="58" r="11" fill="none" stroke="#f2b33d" stroke-width="9"/><circle cx="98" cy="58" r="11" fill="none" stroke="#3cc8b4" stroke-width="9"/></svg>';
+  function money(v, cur) { if (v === '' || v == null) return ''; var n = num(v); if (!cur || cur === 'BRL') return brl(n); return (cur === 'USD' ? 'US$ ' : cur === 'CNY' ? '¥ ' : cur + ' ') + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function pct(v) { return ((Number(v) || 0) * 100).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '%'; }
+  function ago(iso) { if (!iso) return ''; var m = Math.round((Date.now() - new Date(iso).getTime()) / 60000); if (m < 1) return 'agora'; if (m < 60) return 'há ' + m + ' min'; var h = Math.round(m / 60); if (h < 24) return 'há ' + h + ' h'; var d = Math.round(h / 24); return 'há ' + d + (d === 1 ? ' dia' : ' dias'); }
+  function when(iso) { if (!iso) return ''; var d = new Date(iso); return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); }
+  function host(u) { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return u; } }
+  function toast(msg, err) { $$('.toast').forEach(function (t) { t.remove(); }); var t = document.createElement('div'); t.className = 'toast' + (err ? ' err' : ''); t.textContent = msg; document.body.appendChild(t); setTimeout(function () { t.remove(); }, err ? 6000 : 3500); }
+  function copy(text, what) { (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () { toast((what || 'Texto') + ' copiado.'); }, function () { prompt('Copie:', text); }); }
+  var I = {
+    logo: '<svg class="logo" viewBox="0 0 120 80"><path d="M22 58 C 34 6, 86 6, 98 58" fill="none" stroke="#f2b33d" stroke-width="9" stroke-linecap="round"/><circle cx="22" cy="58" r="11" fill="none" stroke="#f2b33d" stroke-width="9"/><circle cx="98" cy="58" r="11" fill="none" stroke="#3cc8b4" stroke-width="9"/></svg>',
+    home: '<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+    bag: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+    chat: '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>',
+    box: '<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+    more: '<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
+    back: '<path d="m15 18-6-6 6-6"/>',
+    ext: '<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
+    copy: '<rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+    search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+    spark: '<path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0L14.06 8.5A2 2 0 0 0 15.5 9.94l6.14 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z"/>',
+    bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+  };
+  function ic(name, cls) { return '<svg' + (cls ? ' class="' + cls + '"' : '') + ' viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + I[name] + '</svg>'; }
 
-  // convite/ligação vinda do QR code: #c=<base64>
+  // ligação vinda do QR code: #c=<base64>
   (function () {
     var m = location.hash.match(/c=([A-Za-z0-9_-]+)/);
     if (!m) return;
     try {
       var b = m[1].replace(/-/g, '+').replace(/_/g, '/');
       var j = JSON.parse(decodeURIComponent(escape(atob(b + '==='.slice((b.length + 3) % 4)))));
-      if (j.u && j.k && j.t) { st.url = j.u; st.key = j.k; st.team = j.t; st.teamName = j.n || ''; save(); }
+      if (j.u && j.k && j.t) {
+        if (st.team !== j.t || st.url !== j.u) { st.access = null; ui.snap = null; }
+        st.url = j.u; st.key = j.k; st.team = j.t; st.teamName = j.n || ''; save();
+      }
     } catch (e) { /* link inválido */ }
-    history.replaceState(null, '', location.pathname);
+    history.replaceState(null, '', location.pathname + '#inicio');
   })();
 
+  /* ------------------------------------------------------------ servidor da equipe */
   function apiAt(base, path, body, access) {
     var h = { apikey: base.key, 'content-type': 'application/json' };
     if (access) h.Authorization = 'Bearer ' + access;
@@ -94,27 +180,25 @@
     }, function () { return { ok: false, status: 0, body: { message: 'Sem conexão com o servidor da equipe.' } }; });
   }
   function api(path, body, auth) { return apiAt({ url: st.url, key: st.key }, path, body, auth !== false ? st.access : null); }
-  // id da pessoa dentro do token de acesso
   function mySub() { try { var p = String(st.access || '').split('.')[1].replace(/-/g, '+').replace(/_/g, '/'); return JSON.parse(atob(p + '==='.slice((p.length + 3) % 4))).sub || null; } catch (e) { return null; } }
   function errText(j) { var m = (j && (j.message || j.msg || j.error_description || j.error)) || 'Erro'; if (/invalid login/i.test(m)) return 'E-mail ou senha incorretos.'; return m; }
+  var refreshing = null;
   function refresh() {
-    return api('/auth/v1/token?grant_type=refresh_token', { refresh_token: st.refresh }, false).then(function (r) {
-      if (!r.ok) { st.access = null; save(); render(); throw new Error('Entre de novo.'); }
+    if (refreshing) return refreshing;
+    refreshing = api('/auth/v1/token?grant_type=refresh_token', { refresh_token: st.refresh }, false).then(function (r) {
+      if (!r.ok) { if (r.status) { st.access = null; save(); render(); } throw new Error(r.status ? 'Entre de novo.' : 'Sem conexão.'); }
       st.access = r.body.access_token; st.refresh = r.body.refresh_token; st.exp = Date.now() + (r.body.expires_in || 3600) * 1000; save();
-    });
+    }).then(function (x) { refreshing = null; return x; }, function (e) { refreshing = null; throw e; });
+    return refreshing;
   }
   function rpc(fn, args) {
     var go = function () { return api('/rest/v1/rpc/' + fn, args); };
     var pre = st.exp && Date.now() > st.exp - 60000 ? refresh() : Promise.resolve();
-    return pre.then(go).then(function (r) {
-      if (r.status === 401) return refresh().then(go);
-      return r;
-    }).then(function (r) {
+    return pre.then(go).then(function (r) { if (r.status === 401) return refresh().then(go); return r; }).then(function (r) {
       if (!r.ok) throw new Error(errText(r.body));
       return r.body;
     });
   }
-
   function login(email, pass) {
     return api('/auth/v1/token?grant_type=password', { email: email, password: pass }, false).then(function (r) {
       if (!r.ok) throw new Error(errText(r.body));
@@ -122,23 +206,528 @@
     });
   }
 
-  var pollT = null;
-  function poll() {
+  /* ------------------------------------------------------------ dados (versão de acordo com a permissão) */
+  function variantsFor(me) {
+    if (!me) return ['owner', 'costs', 'team'];
+    if (me.role === 'owner') return ['owner', 'costs', 'team'];
+    if ((me.perms || {}).custos) return ['costs', 'team'];
+    return ['team'];
+  }
+  function normalizeSnap(s) {
+    if (!s || s.v === 2) return s;
+    // dados de um computador com o Ponte antigo
+    return { v: 1, old: true, accounts: [], costs: false, questions: s.questions || [], messages: [], claims: [], items: [], stock: null, templates: [], summary: null, lowStock: 3,
+      orders: (s.orders || []).map(function (o) { return { id: o.id, date: o.date, status: o.status, acc: o.acc, buyer: { nickname: o.buyer || '' }, total: o.total, addr: o.addr ? { name: o.addr.name, street: o.addr.line, number: '', neighborhood: '', city: o.addr.city, state: '', zip: o.addr.zip } : null, items: (o.items || []).map(function (i) { return { id: i.id, title: i.title, qty: i.qty, variation: i.variation, thumb: i.thumb, links: o.link ? [o.link] : [] }; }), meta: o.meta || { status: 'novo' } }; }), at: s.at };
+  }
+  var pollT = null, polling = false;
+  function poll(soon) {
     clearTimeout(pollT);
     if (!st.access || !st.team) return;
-    Promise.all([rpc('ponte_get', { p_team: st.team, p_kind: 'mobile', p_key: 'snap' }), rpc('ponte_get', { p_team: st.team, p_kind: 'config', p_key: 'sharing' }),
-                 rpc('ponte_get', { p_team: st.team, p_kind: 'moved', p_key: 'all' }).catch(function () { return null; })]).then(function (res) {
+    if (soon) { pollT = setTimeout(poll, soon); return; }
+    if (polling) return;
+    polling = true;
+    var order = variantsFor(ui.me);
+    var tryKey = function (i) {
+      if (i >= order.length) return rpc('ponte_get', { p_team: st.team, p_kind: 'mobile', p_key: 'snap' }).then(function (r) { return { key: 'snap', r: r }; });
+      var k = order[i];
+      return rpc('ponte_get', { p_team: st.team, p_kind: 'mobile', p_key: k, p_since: ui.vkey === k && ui.snap ? ui.snapVer || null : null }).then(function (r) {
+        if (r && r.me) ui.me = r.me;
+        if (r && (r.unchanged || (r.data && !r.deleted))) return { key: k, r: r };
+        return tryKey(i + 1);
+      });
+    };
+    Promise.all([tryKey(0), rpc('ponte_get', { p_team: st.team, p_kind: 'moved', p_key: 'all' }).catch(function () { return null; })]).then(function (res) {
+      var got = res[0], r = got.r;
       ui.lastErr = null;
-      ui.snap = res[0] && res[0].data ? res[0].data : null;
-      ui.worker = res[0] ? res[0].worker || null : null;
-      ui.me = res[0] && res[0].me ? res[0].me : (res[1] && res[1].me) || ui.me;
-      ui.sharing = res[1] && res[1].data ? res[1].data : {};
-      var mv = res[2] && res[2].data;
-      ui.moved = mv && mv.url && mv.url.replace(/\/+$/, '') !== String(st.url).replace(/\/+$/, '') ? mv : null;
-      render();
-    }).catch(function (e) { ui.lastErr = e.message; render(); }).then(function () { pollT = setTimeout(poll, document.hidden ? 60000 : 15000); });
+      ui.worker = r ? r.worker || null : null;
+      if (r && r.me) ui.me = r.me;
+      var changed = false;
+      if (r && r.unchanged) { /* nada novo */ }
+      else if (r && r.data && !r.deleted) { ui.snap = normalizeSnap(r.data); ui.vkey = got.key; ui.snapVer = r.version; saveSnap(); changed = true; }
+      else if (!ui.snap || ui.vkey !== got.key) { if (ui.snap) changed = true; ui.snap = null; }
+      var mv = res[1] && res[1].data;
+      var moved = mv && mv.url && mv.url.replace(/\/+$/, '') !== String(st.url).replace(/\/+$/, '') ? mv : null;
+      if (!!moved !== !!ui.moved) changed = true;
+      ui.moved = moved;
+      if (!ui.loaded) { ui.loaded = true; changed = true; }
+      ensurePush();
+      if (changed) softRender(); else updateHeader();
+    }).catch(function (e) { ui.lastErr = e.message; softRender(); }).then(function () { polling = false; pollT = setTimeout(poll, document.hidden ? 120000 : 20000); });
   }
   document.addEventListener('visibilitychange', function () { if (!document.hidden) poll(); });
+  // não redesenha enquanto a pessoa digita
+  function softRender() { var a = document.activeElement; if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) { ui.pending = true; return; } render(); }
+  document.addEventListener('focusout', function () { setTimeout(function () { if (ui.pending && !/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement || {}).tagName || '')) { ui.pending = false; render(); } }, 120); });
+
+  function online() { return !!(ui.worker && ui.worker.until && new Date(ui.worker.until).getTime() > Date.now()); }
+  function can(p) { return !ui.me || ui.me.role === 'owner' || !!(ui.me.perms || {})[p]; }
+  function S() { return ui.snap || { orders: [], questions: [], messages: [], claims: [], items: [], templates: [] }; }
+
+  // pedido para o computador principal executar (respeita as permissões de quem pediu)
+  function command(cmd) {
+    var key = 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    cmd.status = 'pending'; cmd.byName = (ui.me && ui.me.name) || st.email; cmd.at = new Date().toISOString();
+    return rpc('ponte_put', { p_team: st.team, p_kind: 'cmd', p_key: key, p_data: cmd }).then(function () {
+      var tries = 0;
+      return new Promise(function (resolve, reject) {
+        (function check() {
+          rpc('ponte_get', { p_team: st.team, p_kind: 'cmd', p_key: key }).then(function (d) {
+            var s = d && d.data && d.data.status;
+            if (s === 'done') { poll(1500); return resolve(d.data.result || {}); }
+            if (s === 'error') return reject(new Error(d.data.error || 'Não deu certo.'));
+            if (++tries > 45) return reject(new Error(online() ? 'O computador principal demorou para responder. Tente de novo.' : 'O computador principal da loja está desligado ou sem o Ponte aberto.'));
+            setTimeout(check, tries < 6 ? 1000 : 1800);
+          }).catch(reject);
+        })();
+      });
+    });
+  }
+  function busy(id, fn, okMsg) {
+    if (ui.busy[id]) return;
+    ui.busy[id] = true; render();
+    return fn().then(function (r) { if (okMsg) toast(typeof okMsg === 'function' ? okMsg(r) : okMsg); return r; }, function (e) { toast(e.message, true); }).then(function (r) { delete ui.busy[id]; render(); return r; });
+  }
+
+  /* ------------------------------------------------------------ rotas */
+  function route() { var h = location.hash.replace(/^#/, '') || 'inicio'; var m = h.match(/^([a-z]+)(?:=(.+))?$/); return m ? { name: m[1], id: m[2] ? decodeURIComponent(m[2]) : null } : { name: 'inicio' }; }
+  function go(h) { if (location.hash !== '#' + h) location.hash = h; else render(); }
+  window.addEventListener('hashchange', function () { window.scrollTo(0, 0); render(); });
+  var TAB_OF = { inicio: 'inicio', vendas: 'vendas', venda: 'vendas', perguntas: 'atend', mensagens: 'atend', msg: 'atend', reclamacoes: 'atend', anuncios: 'estoque', anuncio: 'estoque', estoque: 'estoque', mais: 'mais' };
+
+  var STATUS = { novo: 'A comprar', comprado: 'Comprado', enviado: 'Enviado', entregue: 'Entregue', problema: 'Problema' };
+  var SHIP = { pending: 'pendente', handling: 'em preparação', ready_to_ship: 'pronto para enviar', shipped: 'a caminho', delivered: 'entregue', not_delivered: 'não entregue', cancelled: 'cancelado' };
+  function statusChip(o) {
+    if (o.status === 'cancelled') return '<span class="chip loss">Cancelada</span>';
+    var s = o.meta.status || 'novo';
+    return '<span class="chip ' + (s === 'novo' ? 'sale' : s === 'problema' ? 'loss' : s === 'entregue' ? 'gain' : 'sup') + '">' + STATUS[s] + '</span>';
+  }
+  function thumb(src, cls) { return src ? '<img class="thumb' + (cls ? ' ' + cls : '') + '" src="' + esc(src) + '" alt="" loading="lazy">' : '<div class="thumb' + (cls ? ' ' + cls : '') + '"></div>'; }
+  function primaryLink(it) { var ls = it.links || []; for (var i = 0; i < ls.length; i++) if (ls[i].primary) return ls[i]; return ls[0] || null; }
+  function supName(l) { return l ? (l.label || host(l.url)) : 'Sem fornecedor'; }
+  function toBuy() { return S().orders.filter(function (o) { return (o.meta.status || 'novo') === 'novo' && o.status !== 'cancelled'; }); }
+  function lowItems() { var lim = S().lowStock != null ? S().lowStock : 3; return S().items.filter(function (i) { return i.status === 'active' && i.logistic !== 'fulfillment' && !i.prazo && (i.available || 0) <= lim; }); }
+  function fullAddr(a) { return [a.name, [a.street, a.number].filter(Boolean).join(', ') + (a.comment ? ' (' + a.comment + ')' : ''), a.neighborhood, [a.city, a.state].filter(Boolean).join(' - '), a.zip ? 'CEP ' + a.zip : ''].filter(Boolean).join('\n'); }
+
+  /* ------------------------------------------------------------ telas */
+  function headerHTML(title, back) {
+    var s = ui.snap;
+    var on = online();
+    return '<header>' + (back ? '<button class="back" data-go="' + esc(back) + '">' + ic('back') + '</button>' : I.logo) + '<h1>' + esc(title) + '</h1><span class="status" id="hstat"><span class="dot ' + (on ? 'on' : '') + '"></span>' + (on ? 'loja online' : s && s.at ? 'atualizado ' + ago(s.at) : 'offline') + '</span></header>';
+  }
+  function updateHeader() { var h = $('#hstat'); if (!h) return; var on = online(); var s = ui.snap; h.innerHTML = '<span class="dot ' + (on ? 'on' : '') + '"></span>' + (on ? 'loja online' : s && s.at ? 'atualizado ' + ago(s.at) : 'offline'); }
+
+  function noticeHTML() {
+    var html = '';
+    if (ui.lastErr) html += '<div class="banner err">' + esc(ui.lastErr) + '</div>';
+    if (ui.moved) {
+      html += '<div class="card"><div class="t">A equipe mudou de servidor</div><p class="small muted">' + esc(ui.moved.by || 'O dono') + ' levou a equipe para um servidor novo. Digite sua senha para continuar (se ainda não tem cadastro lá, ele é criado agora com esta senha).</p>' +
+        '<input id="mvp" type="password" placeholder="Sua senha" autocomplete="current-password"><p id="mverr" class="small" style="color:var(--loss)"></p><div class="acts"><button class="btn main" id="mvgo">Continuar</button></div></div>';
+    }
+    if (!ui.snap && !ui.lastErr && !ui.moved && ui.loaded) {
+      var w = ui.worker;
+      html += '<div class="empty"><b>Esperando o computador da loja mandar os dados…</b><br><br>' + (w && w.name
+        ? 'O computador principal da equipe é o de <b>' + esc(w.name) + '</b>' + (w.app ? ' (Ponte ' + esc(w.app) + ')' : '') + '. ' + (!w.app || /^1\.[0-5]\./.test(w.app) ? 'Ele está com uma versão antiga do Ponte: abra o Ponte nele e clique em <b>Reiniciar e atualizar</b>.' : 'Os dados chegam em até 1 minuto.')
+        : 'Nenhum computador da equipe está com o Ponte aberto agora. Abra o Ponte no computador principal (ou na VM) e espere 1 minuto.') + '</div>';
+    }
+    if (!ui.loaded && !ui.snap) html += '<div class="spin"></div>';
+    if (ui.snap && ui.snap.old) html += '<div class="banner">O computador principal está com uma versão antiga do Ponte: só aparecem perguntas e vendas. Atualize o Ponte nele para ver tudo.</div>';
+    return html;
+  }
+
+  function pageInicio() {
+    var s = S();
+    var sm = s.summary;
+    var html = '';
+    var name = (ui.me && ui.me.name) ? ui.me.name.split(' ')[0] : '';
+    html += '<div class="small muted">' + (name ? 'Olá, ' + esc(name) + '!' : 'Olá!') + ' ' + new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }) + '</div>';
+    if (sm) {
+      html += '<div class="kpis">' +
+        '<div class="tile" data-go="vendas"><div class="k">Vendas hoje</div><div class="v num">' + sm.today.n + '</div><div class="s num">' + brl(sm.today.total) + '</div></div>' +
+        (s.costs ? '<div class="tile" data-go="vendas"><div class="k">Lucro hoje</div><div class="v num ' + (sm.today.profit < 0 ? 'loss' : 'gain') + '">' + brl(sm.today.profit) + '</div><div class="s num">7 dias: ' + brl(sm.d7.profit) + '</div></div>'
+          : '<div class="tile" data-go="vendas"><div class="k">Últimos 7 dias</div><div class="v num">' + sm.d7.n + '</div><div class="s num">' + brl(sm.d7.total) + '</div></div>') +
+        '</div>';
+    }
+    var tb = toBuy().length, q = s.questions.length, m = s.messages.length, c = s.claims.length, lw = lowItems().length;
+    html += '<div class="kpis">' +
+      '<div class="tile ' + (tb ? 'hot' : '') + '" data-go="vendas" data-vf="novo"><div class="k">A comprar</div><div class="v num">' + tb + '</div><div class="s">no fornecedor</div></div>' +
+      '<div class="tile ' + (q ? 'hot' : '') + '" data-go="perguntas"><div class="k">Perguntas</div><div class="v num">' + q + '</div><div class="s">esperando resposta</div></div>' +
+      '<div class="tile ' + (m ? 'hot' : '') + '" data-go="mensagens"><div class="k">Mensagens</div><div class="v num">' + m + '</div><div class="s">não lidas</div></div>' +
+      '<div class="tile ' + (c ? 'alert' : '') + '" data-go="reclamacoes"><div class="k">Reclamações</div><div class="v num">' + c + '</div><div class="s">abertas</div></div>' +
+      (s.items.length ? '<div class="tile ' + (lw ? 'alert' : '') + '" data-go="anuncios" data-af="baixo"><div class="k">Estoque baixo</div><div class="v num">' + lw + '</div><div class="s">anúncios</div></div>' : '') +
+      (sm ? '<div class="tile" data-go="vendas" data-vf="todas"><div class="k">30 dias</div><div class="v num">' + sm.d30.n + '</div><div class="s num">' + brl(sm.d30.total) + (s.costs ? ' · lucro ' + brl(sm.d30.profit) : '') + '</div></div>' : '') +
+      '</div>';
+    var late = s.orders.filter(function (o) { return o.ship && o.ship.limit && o.status !== 'cancelled' && (o.ship.status === 'ready_to_ship' || o.ship.status === 'handling' || o.ship.status === 'pending') && new Date(o.ship.limit).getTime() - Date.now() < 24 * 3600e3; });
+    if (late.length) {
+      html += '<h2 class="sec">Despachar logo</h2>';
+      late.slice(0, 5).forEach(function (o) { html += orderCard(o); });
+    }
+    html += '<h2 class="sec">Últimas vendas</h2>';
+    var last = s.orders.slice(0, 6);
+    if (!last.length) html += '<div class="empty small">Nenhuma venda nos últimos 30 dias.</div>';
+    last.forEach(function (o) { html += orderCard(o); });
+    return html;
+  }
+
+  function orderCard(o) {
+    var it = o.items[0] || {};
+    var more = o.items.length > 1 ? ' + ' + (o.items.length - 1) : '';
+    var link = primaryLink(it);
+    var pr = o.profit;
+    return '<div class="card tap" data-go="venda=' + esc(o.id) + '"><div class="row">' + thumb(it.thumb) + '<div class="grow"><div class="t clamp2">' + esc(it.title || 'Produto') + more + '</div>' +
+      '<div class="small muted ell">' + (it.qty || 1) + '× ' + (it.variation ? esc(it.variation) + ' · ' : '') + esc(o.buyer.nickname || '') + ' · ' + ago(o.date) + (o.acc ? ' · ' + esc(o.acc) : '') + '</div></div></div>' +
+      '<div class="chips">' + statusChip(o) + '<span class="chip num">' + brl(o.total) + '</span>' + (pr ? '<span class="chip num ' + (pr.profit < 0 ? 'loss' : 'gain') + '">lucro ' + brl(pr.profit) + (pr.missingCost ? '?' : '') + '</span>' : '') +
+      (link ? '<span class="chip sup ell" style="max-width:52%">' + esc(supName(link)) + (link.price !== '' ? ' · ' + esc(money(link.price, link.currency)) : '') + '</span>' : '<span class="chip">sem fornecedor</span>') + (o.unread ? '<span class="chip sale">mensagem</span>' : '') + '</div></div>';
+  }
+
+  function pageVendas() {
+    var f = ui.filters;
+    var s = S();
+    var all = s.orders;
+    var counts = { novo: toBuy().length, comprado: 0, enviado: 0, todas: all.length };
+    all.forEach(function (o) { if (o.status !== 'cancelled' && o.meta.status === 'comprado') counts.comprado++; if (o.meta.status === 'enviado') counts.enviado++; });
+    var html = '<div class="seg">' + [['novo', 'A comprar (' + counts.novo + ')'], ['fornecedor', 'Por fornecedor'], ['comprado', 'Comprados (' + counts.comprado + ')'], ['enviado', 'Enviados'], ['todas', 'Todas']].map(function (x) { return '<button class="' + (f.vendas === x[0] ? 'on' : '') + '" data-vf="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
+    html += '<div class="search">' + ic('search') + '<input id="vq" type="search" placeholder="Buscar produto, comprador ou nº do pedido" value="' + esc(f.q) + '"></div>';
+    var q = f.q.trim().toLowerCase();
+    var match = function (o) { if (!q) return true; return (o.id + ' ' + (o.buyer.nickname || '') + ' ' + (o.buyer.name || '') + ' ' + o.items.map(function (i) { return i.title + ' ' + (i.sku || ''); }).join(' ') + ' ' + (o.meta.supplierOrderId || '')).toLowerCase().indexOf(q) >= 0; };
+    if (f.vendas === 'fornecedor') return html + bySupplierHTML(toBuy().filter(match));
+    var list = all.filter(function (o) {
+      if (!match(o)) return false;
+      if (f.vendas === 'todas') return true;
+      if (o.status === 'cancelled') return false;
+      return (o.meta.status || 'novo') === f.vendas;
+    });
+    if (!list.length) html += '<div class="empty">' + (f.vendas === 'novo' ? 'Nada para comprar agora. 🎉' : 'Nenhuma venda aqui.') + '</div>';
+    list.slice(0, 120).forEach(function (o) { html += orderCard(o); });
+    return html;
+  }
+
+  function bySupplierHTML(orders) {
+    var groups = {};
+    orders.forEach(function (o) {
+      o.items.forEach(function (it) {
+        var l = primaryLink(it);
+        var k = l ? supName(l).toLowerCase() : '~';
+        (groups[k] = groups[k] || { name: supName(l), lines: [] }).lines.push({ o: o, it: it, l: l });
+      });
+    });
+    var keys = Object.keys(groups).sort(function (a, b) { return groups[b].lines.length - groups[a].lines.length; });
+    if (!keys.length) return '<div class="empty">Nada para comprar agora. 🎉</div>';
+    return keys.map(function (k) {
+      var g = groups[k];
+      var units = g.lines.reduce(function (a, x) { return a + (x.it.qty || 1); }, 0);
+      return '<div class="card"><div class="group-h"><div class="grow"><div class="t">' + esc(g.name) + '</div><div class="small muted">' + g.lines.length + (g.lines.length === 1 ? ' venda · ' : ' vendas · ') + units + ' un.</div></div></div>' +
+        g.lines.map(function (x) {
+          return '<div class="sup-row">' + thumb(x.it.thumb, 'sm') + '<div class="grow"><div class="small t clamp2">' + (x.it.qty || 1) + '× ' + esc(x.it.title) + '</div><div class="xs muted ell">' + (x.it.variation ? esc(x.it.variation) + ' · ' : '') + esc(x.o.buyer.nickname || '') + ' · ' + ago(x.o.date) + (x.l && x.l.price !== '' ? ' · ' + esc(money(x.l.price, x.l.currency)) : '') + '</div></div>' +
+            (x.l ? '<a class="btn sm sup" href="' + esc(x.l.url) + '" target="_blank" rel="noopener">Abrir</a>' : '') + '<button class="btn sm" data-go="venda=' + esc(x.o.id) + '">Ver</button></div>';
+        }).join('') + '</div>';
+    }).join('');
+  }
+
+  function pageVenda(id) {
+    var o = S().orders.filter(function (x) { return x.id === id; })[0];
+    if (!o) return '<div class="empty">Venda não encontrada (pode ser de mais de 30 dias).</div>';
+    var html = '';
+    html += '<div class="card"><div class="row"><div class="grow"><div class="small muted">Venda ' + esc(o.id) + (o.acc ? ' · ' + esc(o.acc) : '') + '</div><div class="t">' + esc(o.buyer.name || o.buyer.nickname || 'Comprador') + '</div><div class="small muted">' + esc(o.buyer.nickname || '') + ' · ' + when(o.date) + '</div></div><div style="text-align:right"><div class="t num">' + brl(o.total) + '</div>' + statusChip(o) + '</div></div></div>';
+    // itens e fornecedores
+    o.items.forEach(function (it) {
+      html += '<div class="card"><div class="row">' + thumb(it.thumb) + '<div class="grow"><div class="t clamp2">' + esc(it.title) + '</div><div class="small muted">' + (it.qty || 1) + '× ' + brl(it.unitPrice) + (it.variation ? ' · ' + esc(it.variation) : '') + (it.sku ? ' · SKU ' + esc(it.sku) : '') + '</div></div></div>';
+      var ls = it.links || [];
+      html += '<div style="margin-top:8px">' + (ls.length ? ls.map(function (l) {
+        return '<div class="sup-row"><div class="grow"><div class="small t ell">' + esc(supName(l)) + (l.primary ? ' <span class="chip sup">principal</span>' : '') + '</div><div class="xs muted">' + (l.price !== '' ? esc(money(l.price, l.currency)) : 'sem preço') + (l.shipping !== '' && l.shipping != null && num(l.shipping) ? ' + frete ' + esc(money(l.shipping, l.currency)) : '') + '</div></div>' +
+          '<button class="btn sm ghost" data-copy="' + esc(l.url) + '" data-what="Link">' + ic('copy') + '</button><a class="btn sm sup" href="' + esc(l.url) + '" target="_blank" rel="noopener">' + ic('ext') + ' Abrir</a></div>';
+      }).join('') : '<div class="small muted">Sem link de fornecedor. Adicione no Ponte do computador.</div>') + '</div></div>';
+    });
+    // endereço
+    if (o.addr) {
+      var a = o.addr;
+      html += '<div class="card"><div class="t">Entrega</div><div class="addr">' + esc(fullAddr(a)).replace(/\n/g, '<br>') + (a.phone ? '<br>Tel.: ' + esc(a.phone) : '') + '</div>' +
+        '<div class="acts"><button class="btn sm" data-copy="' + esc(fullAddr(a)) + '" data-what="Endereço">' + ic('copy') + ' Endereço</button>' + (a.zip ? '<button class="btn sm" data-copy="' + esc(a.zip) + '" data-what="CEP">CEP</button>' : '') + '<button class="btn sm" data-copy="' + esc(a.name) + '" data-what="Nome">Nome</button></div></div>';
+    }
+    if (o.ship) {
+      html += '<div class="card"><div class="t">Envio</div><div class="kv"><span class="muted">Situação</span><b>' + esc(SHIP[o.ship.status] || o.ship.status || '—') + '</b></div>' +
+        (o.ship.limit ? '<div class="kv"><span class="muted">Despachar até</span><b class="' + (new Date(o.ship.limit) < new Date() ? 'loss' : '') + '">' + when(o.ship.limit) + '</b></div>' : '') +
+        (o.ship.tracking ? '<div class="kv"><span class="muted">Rastreio</span><b>' + esc(o.ship.tracking) + '</b></div>' : '') +
+        (o.ship.estimated ? '<div class="kv"><span class="muted">Chega até</span><b>' + when(o.ship.estimated) + '</b></div>' : '') + '</div>';
+    }
+    // lucro
+    if (o.profit) {
+      var p = o.profit;
+      html += '<div class="card"><div class="t">Lucro</div>' +
+        '<div class="kv"><span class="muted">Venda</span><b class="num">' + brl(p.revenue) + '</b></div>' +
+        '<div class="kv"><span class="muted">Tarifa do Mercado Livre</span><b class="num">− ' + brl(p.fee) + '</b></div>' +
+        (p.shipping ? '<div class="kv"><span class="muted">Frete</span><b class="num">− ' + brl(p.shipping) + '</b></div>' : '') +
+        (p.tax ? '<div class="kv"><span class="muted">Impostos e custos fixos</span><b class="num">− ' + brl(p.tax) + '</b></div>' : '') +
+        '<div class="kv"><span class="muted">Custo do produto</span><b class="num">− ' + brl(p.productCost) + '</b></div>' +
+        (p.extra ? '<div class="kv"><span class="muted">Custos extras</span><b class="num">− ' + brl(p.extra) + '</b></div>' : '') +
+        '<div class="kv"><span>Lucro</span><b class="num ' + (p.profit < 0 ? 'loss' : 'gain') + '">' + brl(p.profit) + ' · ' + pct(p.margin) + '</b></div>' +
+        (p.missingCost ? '<p class="small warn" style="margin:6px 0 0">Falta o custo de algum produto: o lucro pode estar maior do que é.</p>' : '') + '</div>';
+    }
+    // situação e dados
+    var sNow = o.meta.status || 'novo';
+    if (o.status !== 'cancelled') {
+      html += '<div class="card"><div class="t" style="margin-bottom:8px">Situação</div><div class="steps">' + ['novo', 'comprado', 'enviado', 'entregue', 'problema'].map(function (k) {
+        return '<button class="' + (sNow === k ? 'on' : '') + '" data-status="' + k + '" data-id="' + esc(o.id) + '"' + (!can('pedidos') || ui.busy['st' + o.id] ? ' disabled' : '') + '>' + STATUS[k] + '</button>';
+      }).join('') + '</div>' + (o.meta.statusBy ? '<div class="xs muted" style="margin-top:6px">Última mudança por ' + esc(o.meta.statusBy) + (o.meta.statusAt ? ' · ' + ago(o.meta.statusAt) : '') + '</div>' : '') + '</div>';
+    }
+    if (can('pedidos')) {
+      var d = ui.drafts['meta' + o.id] || {};
+      var v = function (k) { return d[k] !== undefined ? d[k] : (o.meta[k] || ''); };
+      html += '<div class="card"><div class="t">Dados da compra</div>' +
+        '<label>Nº do pedido no fornecedor</label><input data-meta="supplierOrderId" data-id="' + esc(o.id) + '" value="' + esc(v('supplierOrderId')) + '">' +
+        '<label>Rastreio do fornecedor</label><input data-meta="tracking" data-id="' + esc(o.id) + '" value="' + esc(v('tracking')) + '">' +
+        (S().costs ? '<label>Valor pago no fornecedor (R$)</label><input inputmode="decimal" data-meta="paidAmount" data-id="' + esc(o.id) + '" value="' + esc(v('paidAmount')) + '" placeholder="usa o custo do link se ficar vazio">' : '') +
+        '<label>Anotações</label><textarea data-meta="notes" data-id="' + esc(o.id) + '" style="min-height:70px">' + esc(v('notes')) + '</textarea>' +
+        '<div class="acts"><button class="btn main" data-savemeta="' + esc(o.id) + '"' + (ui.busy['mt' + o.id] ? ' disabled' : '') + '>' + (ui.busy['mt' + o.id] ? 'Salvando…' : 'Salvar') + '</button></div></div>';
+    }
+    if (can('atendimento')) html += '<button class="btn block" data-go="msg=' + esc(o.id) + '">' + ic('chat') + ' Conversar com o comprador' + (o.unread ? ' <span class="chip sale">nova</span>' : '') + '</button>';
+    return html;
+  }
+
+  function pageAtend(sub) {
+    var s = S();
+    var html = '<div class="seg">' + [['perguntas', 'Perguntas (' + s.questions.length + ')'], ['mensagens', 'Mensagens (' + s.messages.length + ')'], ['reclamacoes', 'Reclamações (' + s.claims.length + ')']].map(function (x) { return '<button class="' + (sub === x[0] ? 'on' : '') + '" data-go="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
+    if (sub === 'perguntas') {
+      if (!s.questions.length) html += '<div class="empty">Nenhuma pergunta esperando resposta. 🎉</div>';
+      var tpls = (s.templates || []).filter(function (t) { return t.kind === 'question'; });
+      s.questions.forEach(function (q) {
+        html += '<div class="card"><div class="row">' + thumb(q.thumb) + '<div class="grow"><div class="t clamp2">' + esc(q.itemTitle) + '</div><div class="small muted">' + (q.price != null ? brl(q.price) + ' · ' : '') + (q.available != null ? q.available + ' em estoque · ' : '') + (q.acc ? esc(q.acc) + ' · ' : '') + ago(q.date) + '</div></div></div>' +
+          '<div class="q">“' + esc(q.text) + '”</div>' +
+          (can('atendimento') ? '<textarea id="a-' + esc(q.id) + '" placeholder="Escreva a resposta…">' + esc(ui.drafts[q.id] || '') + '</textarea>' +
+            '<div class="acts"><button class="btn sm" data-ai="' + esc(q.id) + '"' + (ui.busy['ai' + q.id] ? ' disabled' : '') + '>' + ic('spark') + (ui.busy['ai' + q.id] ? ' Pensando…' : ' Sugerir com IA') + '</button>' +
+            (tpls.length ? '<select class="btn sm" data-tpl="' + esc(q.id) + '" style="flex:1"><option value="">Resposta pronta…</option>' + tpls.map(function (t) { return '<option value="' + esc(t.id) + '">' + esc(t.name) + '</option>'; }).join('') + '</select>' : '') + '</div>' +
+            '<div class="acts"><button class="btn main" data-ans="' + esc(q.id) + '"' + (ui.busy[q.id] ? ' disabled' : '') + '>' + (ui.busy[q.id] ? 'Enviando…' : 'Responder') + '</button></div>' : '<div class="small muted">Sem permissão para responder.</div>') + '</div>';
+      });
+    }
+    if (sub === 'mensagens') {
+      if (!s.messages.length) html += '<div class="empty">Nenhuma mensagem nova de comprador.</div>';
+      s.messages.forEach(function (m) {
+        html += '<div class="card tap" ' + (m.orderId ? 'data-go="msg=' + esc(m.orderId) + '"' : '') + '><div class="row">' + thumb(m.thumb) + '<div class="grow"><div class="t ell">' + esc(m.buyer || 'Comprador') + '</div><div class="small muted clamp2">' + esc(m.itemTitle || '') + (m.acc ? ' · ' + esc(m.acc) : '') + '</div></div><span class="chip sale">nova</span></div></div>';
+      });
+      html += '<p class="small muted" style="text-align:center">Para falar com qualquer comprador, abra a venda e toque em “Conversar com o comprador”.</p>';
+    }
+    if (sub === 'reclamacoes') {
+      if (!s.claims.length) html += '<div class="empty">Nenhuma reclamação aberta. 👏</div>';
+      s.claims.forEach(function (c) {
+        var late = c.due && new Date(c.due) < new Date(Date.now() + 24 * 3600e3);
+        html += '<div class="card ' + (c.orderId ? 'tap" data-go="venda=' + esc(c.orderId) : '') + '"><div class="t">' + esc(c.title) + '</div><div class="small muted">' + esc(c.itemTitle || '') + (c.buyer ? ' · ' + esc(c.buyer) : '') + (c.acc ? ' · ' + esc(c.acc) : '') + '</div>' +
+          '<div class="chips">' + (c.mine ? '<span class="chip loss">você precisa responder</span>' : '<span class="chip">aguardando</span>') + (c.due ? '<span class="chip ' + (late ? 'loss' : '') + '">prazo ' + when(c.due) + '</span>' : '') + '<span class="chip">aberta ' + ago(c.date) + '</span></div></div>';
+      });
+      if (s.claims.length) html += '<p class="small muted" style="text-align:center">A resposta às reclamações é feita no Mercado Livre.</p>';
+    }
+    return html;
+  }
+
+  function pageMsg(orderId) {
+    var o = S().orders.filter(function (x) { return x.id === orderId; })[0];
+    var conv = ui.msgs[orderId];
+    var html = '';
+    if (o) html += '<div class="card tap" data-go="venda=' + esc(o.id) + '"><div class="row">' + thumb((o.items[0] || {}).thumb, 'sm') + '<div class="grow"><div class="small t ell">' + esc((o.items[0] || {}).title || '') + '</div><div class="xs muted">' + esc(o.buyer.nickname || '') + ' · venda ' + esc(o.id) + '</div></div></div></div>';
+    if (!conv) { html += '<div class="spin"></div>'; loadMsgs(orderId); return html; }
+    if (conv.error) return html + '<div class="banner err">' + esc(conv.error) + '</div><button class="btn block" data-reloadmsg="' + esc(orderId) + '">Tentar de novo</button>';
+    html += '<div class="bubbles">' + (conv.messages.length ? conv.messages.map(function (m) { return '<div class="bubble ' + (m.fromSeller ? 'me' : '') + '">' + esc(m.text) + '<span class="when">' + when(m.date) + '</span></div>'; }).join('') : '<div class="empty small">Nenhuma mensagem ainda.</div>') + '</div>';
+    if (conv.blocked) return html + '<div class="banner">O Mercado Livre bloqueou novas mensagens nesta conversa (' + esc(conv.blocked) + ').</div>';
+    var tpls = (S().templates || []).filter(function (t) { return t.kind === 'message'; });
+    html += '<div class="card"><textarea id="m-' + esc(orderId) + '" maxlength="' + (conv.maxLength || 350) + '" placeholder="Escreva para o comprador…">' + esc(ui.drafts['m' + orderId] || '') + '</textarea>' +
+      '<div class="acts">' + (tpls.length ? '<select class="btn sm" data-mtpl="' + esc(orderId) + '" style="flex:1"><option value="">Mensagem pronta…</option>' + tpls.map(function (t) { return '<option value="' + esc(t.id) + '">' + esc(t.name) + '</option>'; }).join('') + '</select>' : '') +
+      '<button class="btn main" data-send="' + esc(orderId) + '"' + (ui.busy['ms' + orderId] ? ' disabled' : '') + '>' + (ui.busy['ms' + orderId] ? 'Enviando…' : 'Enviar') + '</button></div><div class="xs muted" style="margin-top:6px">Até ' + (conv.maxLength || 350) + ' caracteres. Não use telefone, e-mail nem links (regra do Mercado Livre).</div></div>';
+    return html;
+  }
+  function loadMsgs(orderId) {
+    if (ui.busy['lm' + orderId]) return;
+    ui.busy['lm' + orderId] = true;
+    command({ type: 'messages', orderId: orderId }).then(function (r) { ui.msgs[orderId] = { messages: r.messages || [], blocked: r.blocked, maxLength: r.maxLength }; }, function (e) { ui.msgs[orderId] = { error: e.message }; })
+      .then(function () { delete ui.busy['lm' + orderId]; if (route().name === 'msg') softRender(); });
+  }
+  function fillTpl(text, o) {
+    var it = o && o.items[0] || {};
+    return String(text || '').replace(/\{nome\}/g, o ? ((o.buyer.name || o.buyer.nickname || '').split(' ')[0]) : '').replace(/\{produto\}/g, it.title || '').replace(/\{rastreio\}/g, (o && o.ship && o.ship.tracking) || '[rastreio]').replace(/\{prazo\}/g, '[prazo]');
+  }
+
+  function pageEstoque(sub) {
+    var s = S();
+    var html = '<div class="seg">' + [['anuncios', 'Anúncios (' + s.items.length + ')'], ['estoque', 'Estoque compartilhado']].map(function (x) { return '<button class="' + (sub === x[0] ? 'on' : '') + '" data-go="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
+    if (sub === 'anuncios') {
+      var f = ui.filters;
+      var lim = s.lowStock != null ? s.lowStock : 3;
+      var groups = { todos: function () { return true; }, ativos: function (i) { return i.status === 'active'; }, pausados: function (i) { return i.status === 'paused'; }, sem: function (i) { return (i.available || 0) === 0; }, baixo: function (i) { return i.status === 'active' && i.logistic !== 'fulfillment' && !i.prazo && (i.available || 0) <= lim; } };
+      html += '<div class="seg">' + [['todos', 'Todos'], ['ativos', 'Ativos'], ['pausados', 'Pausados'], ['baixo', 'Estoque baixo'], ['sem', 'Sem estoque']].map(function (x) { return '<button class="' + (f.anuncios === x[0] ? 'on' : '') + '" data-af="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
+      html += '<div class="search">' + ic('search') + '<input id="aq" type="search" placeholder="Buscar título, MLB ou SKU" value="' + esc(f.aq) + '"></div>';
+      var q = f.aq.trim().toLowerCase();
+      var list = s.items.filter(function (i) { return groups[f.anuncios](i) && (!q || (i.title + ' ' + i.id + ' ' + (i.sku || '')).toLowerCase().indexOf(q) >= 0); });
+      if (!list.length) html += '<div class="empty">' + (s.items.length ? 'Nenhum anúncio aqui.' : 'Os anúncios aparecem quando o computador principal estiver com o Ponte 1.7 ou mais novo.') + '</div>';
+      list.slice(0, 150).forEach(function (i) {
+        html += '<div class="card tap" data-go="anuncio=' + esc(i.id) + '"><div class="row">' + thumb(i.thumb) + '<div class="grow"><div class="t clamp2">' + esc(i.title) + '</div><div class="small muted ell">' + esc(i.id) + (i.acc ? ' · ' + esc(i.acc) : '') + ' · ' + i.sold + ' vendidos</div></div></div>' +
+          '<div class="chips"><span class="chip num">' + brl(i.price) + '</span><span class="chip num ' + ((i.available || 0) <= lim && i.status === 'active' && !i.prazo ? 'loss' : '') + '">' + (i.available || 0) + ' em estoque</span>' +
+          (i.status === 'paused' ? '<span class="chip loss">pausado</span>' : i.status === 'active' ? '<span class="chip gain">ativo</span>' : '<span class="chip">' + esc(i.status) + '</span>') +
+          (i.prazo ? '<span class="chip sale">prazo ' + i.prazo + ' dias</span>' : '') + (i.logistic === 'fulfillment' ? '<span class="chip">Full</span>' : '') + (i.flex ? '<span class="chip sup">Flex</span>' : '') + '</div></div>';
+      });
+    }
+    if (sub === 'estoque') {
+      var stk = s.stock;
+      if (!stk) return html + '<div class="empty">O estoque compartilhado não está liberado para você, ou o computador principal ainda não mandou.</div>';
+      if (!stk.groups.length) html += '<div class="empty">Nenhum grupo de estoque compartilhado. Crie no Ponte do computador, em Estoque.</div>';
+      stk.groups.forEach(function (g) {
+        var d = ui.drafts['g' + g.id];
+        var val = d !== undefined ? d : g.physical;
+        html += '<div class="card"><div class="group-h"><div class="grow"><div class="t">' + esc(g.name) + '</div><div class="small muted">' + (g.sku ? 'SKU ' + esc(g.sku) + ' · ' : '') + esc(g.status.label) + '</div></div></div>' +
+          '<div class="row" style="margin-top:10px"><span class="small muted grow">Estoque físico</span>' + (can('estoque') ? '<div class="stepper"><button class="btn" data-gstep="-1" data-g="' + esc(g.id) + '">−</button><input inputmode="numeric" data-gval="' + esc(g.id) + '" value="' + esc(val) + '"><button class="btn" data-gstep="1" data-g="' + esc(g.id) + '">+</button></div>' : '<b class="num">' + g.physical + '</b>') + '</div>' +
+          (can('estoque') && Number(val) !== g.physical ? '<div class="acts"><button class="btn ghost" data-greset="' + esc(g.id) + '">Desfazer</button><button class="btn main" data-gsave="' + esc(g.id) + '"' + (ui.busy['g' + g.id] ? ' disabled' : '') + '>' + (ui.busy['g' + g.id] ? 'Salvando…' : 'Salvar ' + g.physical + ' → ' + Number(val)) + '</button></div>' : '') +
+          '<div style="margin-top:8px">' + g.members.map(function (m) { return '<div class="sup-row">' + thumb(m.thumb, 'sm') + '<div class="grow"><div class="small ell">' + esc(m.title) + (m.variation ? ' · ' + esc(m.variation) : '') + '</div><div class="xs muted">' + (m.acc ? esc(m.acc) + ' · ' : '') + (m.role === 'drop' ? 'dropshipping' : 'estoque próprio') + '</div></div></div>'; }).join('') + '</div></div>';
+      });
+      (stk.kits || []).forEach(function (k) { html += '<div class="card"><div class="row"><div class="grow"><div class="t">' + esc(k.name) + '</div><div class="small muted">Kit · monta ' + k.physical + ' com o estoque atual</div></div></div></div>'; });
+    }
+    return html;
+  }
+
+  function pageAnuncio(id) {
+    var i = S().items.filter(function (x) { return x.id === id; })[0];
+    if (!i) return '<div class="empty">Anúncio não encontrado.</div>';
+    var d = ui.drafts['it' + id] || {};
+    var html = '<div class="card"><div class="row">' + thumb(i.thumb) + '<div class="grow"><div class="t">' + esc(i.title) + '</div><div class="small muted">' + esc(i.id) + (i.acc ? ' · ' + esc(i.acc) : '') + ' · ' + i.sold + ' vendidos</div></div></div>' +
+      '<div class="chips">' + (i.status === 'paused' ? '<span class="chip loss">pausado</span>' : '<span class="chip gain">ativo</span>') + (i.prazo ? '<span class="chip sale">prazo de disponibilidade ' + i.prazo + ' dias</span>' : '<span class="chip">estoque pronto</span>') + (i.logistic === 'fulfillment' ? '<span class="chip">Full</span>' : '') + (i.flex ? '<span class="chip sup">Flex</span>' : '') + '</div>' +
+      (i.permalink ? '<div class="acts"><a class="btn sm" href="' + esc(i.permalink) + '" target="_blank" rel="noopener">' + ic('ext') + ' Ver no Mercado Livre</a></div>' : '') + '</div>';
+    var full = i.logistic === 'fulfillment';
+    if (can('editar')) {
+      html += '<div class="card"><div class="t">Preço e estoque</div><label>Preço (R$)</label><input inputmode="decimal" data-itf="price" data-id="' + esc(id) + '" value="' + esc(d.price !== undefined ? d.price : String(i.price).replace('.', ',')) + '">' +
+        (S().costs && i.cost ? '<div class="xs muted" style="margin-top:4px">Custo do produto: ' + brl(i.cost) + '</div>' : '');
+      if (full) html += '<p class="small muted">Anúncio no Full: o estoque é do Mercado Livre.</p>';
+      else if (i.variations.length) {
+        html += i.variations.map(function (v) { var k = 'v' + v.id; return '<label>' + esc(v.name) + '</label><input inputmode="numeric" data-itf="' + k + '" data-id="' + esc(id) + '" value="' + esc(d[k] !== undefined ? d[k] : v.available) + '">'; }).join('');
+      } else html += '<label>Estoque</label><input inputmode="numeric" data-itf="available" data-id="' + esc(id) + '" value="' + esc(d.available !== undefined ? d.available : i.available) + '">';
+      html += '<div class="acts"><button class="btn main" data-saveit="' + esc(id) + '"' + (ui.busy['it' + id] ? ' disabled' : '') + '>' + (ui.busy['it' + id] ? 'Salvando no Mercado Livre…' : 'Salvar no Mercado Livre') + '</button></div><div class="xs muted" style="margin-top:6px">Se o anúncio estiver no estoque compartilhado, o estoque muda o físico do grupo e as outras contas acompanham.</div></div>';
+    }
+    if (can('pausar') && (i.status === 'active' || i.status === 'paused')) html += '<button class="btn block ' + (i.status === 'active' ? 'danger' : '') + '" data-itstatus="' + (i.status === 'active' ? 'paused' : 'active') + '" data-id="' + esc(id) + '"' + (ui.busy['is' + id] ? ' disabled' : '') + '>' + (i.status === 'active' ? 'Pausar anúncio' : 'Reativar anúncio') + '</button>';
+    var ls = i.links || [];
+    html += '<div class="card"><div class="t">Fornecedores</div>' + (ls.length ? ls.map(function (l) { return '<div class="sup-row"><div class="grow"><div class="small t ell">' + esc(supName(l)) + '</div><div class="xs muted">' + (l.price !== '' ? esc(money(l.price, l.currency)) : 'sem preço') + '</div></div><a class="btn sm sup" href="' + esc(l.url) + '" target="_blank" rel="noopener">Abrir</a></div>'; }).join('') : '<div class="small muted">Sem link de fornecedor.</div>') + '</div>';
+    return html;
+  }
+
+  /* ------------------------------------------------------------ notificações */
+  function pushSupport() {
+    var ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    var standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+    if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) return ios && !standalone ? 'ios-install' : 'no';
+    return 'ok';
+  }
+  function b64uToBytes(s) { var b = s.replace(/-/g, '+').replace(/_/g, '/'); var raw = atob(b + '==='.slice((b.length + 3) % 4)); var out = new Uint8Array(raw.length); for (var i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i); return out; }
+  function hashHex(text) { return crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)).then(function (h) { return Array.prototype.map.call(new Uint8Array(h).slice(0, 10), function (b) { return ('0' + b.toString(16)).slice(-2); }).join(''); }); }
+  function putSub(sub) {
+    var uid = mySub();
+    if (!uid) return Promise.reject(new Error('Entre de novo.'));
+    var j = sub.toJSON();
+    return hashHex(j.endpoint).then(function (h) {
+      st.pushKey = uid + ':' + h; st.pushAt = Date.now(); save();
+      return rpc('ponte_put', { p_team: st.team, p_kind: 'pushsub', p_key: st.pushKey, p_data: { endpoint: j.endpoint, keys: j.keys, prefs: st.pushPrefs || {}, ua: navigator.userAgent.slice(0, 120), at: new Date().toISOString() } });
+    });
+  }
+  function enablePush() {
+    var vapid = ui.snap && ui.snap.vapid;
+    if (!vapid) return Promise.reject(new Error('As notificações ainda não estão ligadas na equipe: o computador principal precisa do Ponte 1.7 e o banco da equipe atualizado.'));
+    return Notification.requestPermission().then(function (p) {
+      if (p !== 'granted') throw new Error('Notificações bloqueadas. Libere nas configurações do celular para o Ponte.');
+      return navigator.serviceWorker.ready;
+    }).then(function (reg) {
+      return reg.pushManager.getSubscription().then(function (old) {
+        if (old && st.pushVapid && st.pushVapid !== vapid) return old.unsubscribe().then(function () { return null; });
+        return old;
+      }).then(function (old) { return old || reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64uToBytes(vapid) }); });
+    }).then(function (sub) { st.pushVapid = vapid; st.pushOn = true; save(); return putSub(sub); });
+  }
+  function disablePush() {
+    return navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.getSubscription(); }).then(function (sub) {
+      var key = st.pushKey;
+      st.pushOn = false; save();
+      return Promise.all([sub ? sub.unsubscribe() : null, key ? rpc('ponte_put', { p_team: st.team, p_kind: 'pushsub', p_key: key, p_data: null, p_deleted: true }).catch(function () { return null; }) : null]);
+    });
+  }
+  // renova a inscrição uma vez por dia (e quando as permissões mudam)
+  var pushChecked = false;
+  function ensurePush() {
+    if (pushChecked || !st.pushOn || pushSupport() !== 'ok' || Notification.permission !== 'granted') return;
+    pushChecked = true;
+    if (st.pushAt && Date.now() - st.pushAt < 20 * 3600e3) return;
+    navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.getSubscription(); }).then(function (sub) { if (sub) return putSub(sub); if (ui.snap && ui.snap.vapid) return enablePush(); }).catch(function () { pushChecked = false; });
+  }
+
+  function pageMais() {
+    var me = ui.me || {};
+    var html = '<div class="card"><div class="t">' + esc(me.name || st.email || '') + '</div><div class="small muted">' + esc(st.email || '') + ' · ' + (me.role === 'owner' ? 'Dono' : 'Equipe') + '</div>' +
+      (me.role !== 'owner' && me.perms ? '<div class="chips">' + [['pedidos', 'Pedidos'], ['atendimento', 'Atendimento'], ['editar', 'Editar anúncios'], ['pausar', 'Pausar'], ['estoque', 'Estoque'], ['custos', 'Custos e lucro']].map(function (p) { return '<span class="chip ' + (me.perms[p[0]] ? 'gain' : '') + '">' + (me.perms[p[0]] ? '✓ ' : '✕ ') + p[1] + '</span>'; }).join('') + '</div>' : '') + '</div>';
+    // notificações
+    var sup = pushSupport();
+    var prefs = st.pushPrefs || {};
+    html += '<div class="card"><div class="row"><div class="grow"><div class="t">Notificações</div><div class="small muted">Vendas novas, perguntas, mensagens e reclamações, mesmo com o app fechado.</div></div></div>';
+    if (sup === 'ios-install') html += '<div class="banner" style="margin-top:10px">No iPhone, as notificações só funcionam com o Ponte instalado: toque em <b>Compartilhar</b> (o quadrado com a seta) e depois em <b>Adicionar à Tela de Início</b>. Abra o Ponte pelo ícone novo e volte aqui.</div>';
+    else if (sup === 'no') html += '<p class="small muted">Este navegador não aceita notificações. Use o Chrome no Android ou o Safari no iPhone (iOS 16.4 ou mais novo).</p>';
+    else if (!st.pushOn || Notification.permission !== 'granted') html += '<div class="acts"><button class="btn main" data-push="on"' + (ui.busy.push ? ' disabled' : '') + '>' + ic('bell') + (ui.busy.push ? ' Ativando…' : ' Ativar notificações') + '</button></div>';
+    else html += [['sale', 'Vendas novas'], ['question', 'Perguntas'], ['message', 'Mensagens de compradores'], ['claim', 'Reclamações']].map(function (p) { return '<label class="sw"><span>' + p[1] + '</span><input type="checkbox" data-pref="' + p[0] + '"' + (prefs[p[0]] !== false ? ' checked' : '') + '></label>'; }).join('') +
+      '<div class="acts"><button class="btn ghost danger" data-push="off">Desligar notificações</button></div>';
+    html += '</div>';
+    // instalar
+    var standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+    if (!standalone) html += '<div class="card"><div class="t">Instalar como app</div><p class="small muted" style="margin:6px 0 0">' + (/iphone|ipad|ipod/i.test(navigator.userAgent) ? 'No Safari: toque em <b>Compartilhar</b> → <b>Adicionar à Tela de Início</b>.' : 'No Chrome: toque no menu (⋮) → <b>Instalar app</b> (ou “Adicionar à tela inicial”).') + ' O Ponte abre em tela cheia, com ícone próprio, como um app.</p></div>';
+    var w = ui.worker;
+    html += '<div class="card"><div class="kv"><span class="muted">Equipe</span><b>' + esc(st.teamName || '') + '</b></div><div class="kv"><span class="muted">Computador principal</span><b>' + (w && online() ? esc(w.name || '') + (w.app ? ' · ' + esc(w.app) : '') : 'desligado') + '</b></div><div class="kv"><span class="muted">Dados de</span><b>' + (ui.snap && ui.snap.at ? when(ui.snap.at) : '—') + '</b></div>' +
+      '<div class="acts"><button class="btn" data-refresh="1"' + (ui.busy.refresh ? ' disabled' : '') + '>' + (ui.busy.refresh ? 'Atualizando…' : 'Buscar novidades agora') + '</button></div></div>';
+    html += '<button class="btn block ghost danger" id="out">Sair</button>';
+    return html;
+  }
+
+  /* ------------------------------------------------------------ desenho */
+  function render() {
+    var app = $('#app');
+    if (!st.url || !st.key || !st.team) {
+      app.innerHTML = '<div class="login"><div style="width:72px">' + I.logo.replace('class="logo"', 'style="width:72px;height:50px"') + '</div><h1>Ponte no celular</h1><p class="muted">Abra o Ponte no computador, vá em <b>Equipe → Ponte no celular</b> e aponte a câmera para o código.</p></div>';
+      return;
+    }
+    if (!st.access) {
+      app.innerHTML = '<div class="login"><div style="width:72px">' + I.logo.replace('class="logo"', 'style="width:72px;height:50px"') + '</div><h1>' + esc(st.teamName || 'Ponte') + '</h1><p class="muted">Entre com o e-mail e a senha que você usa na equipe do Ponte.</p>' +
+        '<label>E-mail</label><input id="em" type="email" autocomplete="username" value="' + esc(st.email || '') + '">' +
+        '<label>Senha</label><input id="pw" type="password" autocomplete="current-password">' +
+        '<p id="lerr" class="small" style="color:var(--loss)"></p><button class="btn main block" id="go">Entrar</button></div>';
+      $('#go').onclick = function () {
+        this.disabled = true;
+        var b = this;
+        login($('#em').value.trim(), $('#pw').value).then(function () { ui.me = null; poll(); render(); }).catch(function (e) { $('#lerr').textContent = e.message; b.disabled = false; });
+      };
+      return;
+    }
+    var r = route();
+    var tab = TAB_OF[r.name] || 'inicio';
+    var titles = { inicio: st.teamName || 'Ponte', vendas: 'Vendas', venda: 'Venda', perguntas: 'Atendimento', mensagens: 'Atendimento', reclamacoes: 'Atendimento', msg: 'Conversa', anuncios: 'Estoque', anuncio: 'Anúncio', estoque: 'Estoque', mais: 'Mais' };
+    var back = r.name === 'venda' ? 'vendas' : r.name === 'msg' ? 'mensagens' : r.name === 'anuncio' ? 'anuncios' : null;
+    var body = noticeHTML();
+    if (ui.snap && !ui.moved) {
+      if (r.name === 'inicio') body += pageInicio();
+      else if (r.name === 'vendas') body += pageVendas();
+      else if (r.name === 'venda') body += pageVenda(r.id);
+      else if (r.name === 'perguntas' || r.name === 'mensagens' || r.name === 'reclamacoes') body += pageAtend(r.name);
+      else if (r.name === 'msg') body += pageMsg(r.id);
+      else if (r.name === 'anuncios' || r.name === 'estoque') body += pageEstoque(r.name);
+      else if (r.name === 'anuncio') body += pageAnuncio(r.id);
+    }
+    if (r.name === 'mais') body += pageMais();
+    var s = S();
+    var badge = function (n) { return n ? '<span class="badge">' + (n > 99 ? '99+' : n) + '</span>' : ''; };
+    var nav = '<nav>' + [['inicio', 'Início', 'home', 0], ['vendas', 'Vendas', 'bag', toBuy().length], ['atend', 'Atendimento', 'chat', s.questions.length + s.messages.length], ['estoque', 'Estoque', 'box', 0], ['mais', 'Mais', 'more', 0]].map(function (x) {
+      var target = x[0] === 'atend' ? (s.questions.length || !s.messages.length ? 'perguntas' : 'mensagens') : x[0] === 'estoque' ? 'anuncios' : x[0];
+      return '<button class="' + (tab === x[0] ? 'on' : '') + '" data-go="' + target + '">' + ic(x[2]) + x[1] + badge(x[3]) + '</button>';
+    }).join('') + '</nav>';
+    // guarda o que estava escrito
+    var keep = {};
+    $$('textarea[id],input[id]').forEach(function (t) { if (t.id !== 'vq' && t.id !== 'aq') keep[t.id] = t.value; });
+    var y = window.scrollY;
+    app.innerHTML = headerHTML(titles[r.name] || 'Ponte', back) + '<main>' + body + '</main>' + nav;
+    Object.keys(keep).forEach(function (id) { var t = document.getElementById(id); if (t && !t.value) t.value = keep[id]; });
+    window.scrollTo(0, y);
+    var mvgo = $('#mvgo');
+    if (mvgo) mvgo.onclick = function () {
+      var b = this; b.disabled = true; b.textContent = 'Entrando…';
+      followMove($('#mvp').value).then(function () { toast('Pronto: o celular já usa o servidor novo.'); poll(); render(); })
+        .catch(function (e) { b.disabled = false; b.textContent = 'Continuar'; var el = $('#mverr'); if (el) el.textContent = e.message; });
+    };
+    if (r.name === 'msg') setTimeout(function () { window.scrollTo(0, document.body.scrollHeight); }, 30);
+  }
 
   // a equipe mudou de servidor: entra no novo (cria o cadastro se precisar) e usa o código desta pessoa
   function followMove(pass) {
@@ -156,151 +745,117 @@
         var b = r.body;
         var claim = tok ? apiAt(base, '/rest/v1/rpc/ponte_team_claim', { p_team: st.team, p_token: tok, p_name: (ui.me && ui.me.name) || null, p_email: st.email }, b.access_token).then(function (c) { if (!c.ok) throw new Error(errText(c.body)); }) : Promise.resolve();
         return claim.then(function () {
-          st.url = base.url; st.key = base.key; st.access = b.access_token; st.refresh = b.refresh_token; st.exp = Date.now() + (b.expires_in || 3600) * 1000; save();
-          ui.moved = null; ui.snap = null;
+          st.url = base.url; st.key = base.key; st.access = b.access_token; st.refresh = b.refresh_token; st.exp = Date.now() + (b.expires_in || 3600) * 1000; st.pushAt = 0; save();
+          ui.moved = null; ui.snap = null; ui.vkey = null; pushChecked = false;
         });
       });
     });
   }
 
-  function visible(itemId) {
-    if (!ui.me || ui.me.role === 'owner') return true;
-    var l = (ui.sharing || {}).listings || {};
-    return l.mode !== 'selected' || (l.ids || []).map(String).indexOf(String(itemId)) >= 0;
-  }
-  function can(p) { return !ui.me || ui.me.role === 'owner' || !!(ui.me.perms || {})[p]; }
-
-  function command(cmd) {
-    var key = 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-    cmd.status = 'pending'; cmd.byName = (ui.me && ui.me.name) || st.email; cmd.at = new Date().toISOString();
-    return rpc('ponte_put', { p_team: st.team, p_kind: 'cmd', p_key: key, p_data: cmd }).then(function () {
-      var tries = 0;
-      return new Promise(function (resolve, reject) {
-        (function check() {
-          rpc('ponte_get', { p_team: st.team, p_kind: 'cmd', p_key: key }).then(function (d) {
-            var s = d && d.data && d.data.status;
-            if (s === 'done') return resolve(d.data);
-            if (s === 'error') return reject(new Error(d.data.error || 'Não deu certo.'));
-            if (++tries > 40) return reject(new Error('O computador da loja não respondeu. Ele está ligado com o Ponte aberto?'));
-            setTimeout(check, 1500);
-          }).catch(reject);
-        })();
-      });
-    });
-  }
-
-  function render() {
-    var app = $('#app');
-    if (!st.url || !st.key || !st.team) {
-      app.innerHTML = '<div class="login">' + mark + '<h1>Ponte no celular</h1><p class="muted">Abra o Ponte no computador, vá em <b>Equipe → Ponte no celular</b> e aponte a câmera para o código.</p></div>';
-      return;
+  /* ------------------------------------------------------------ toques */
+  document.addEventListener('input', function (e) {
+    var t = e.target;
+    if (t.id && t.id.indexOf('a-') === 0) ui.drafts[t.id.slice(2)] = t.value;
+    if (t.id && t.id.indexOf('m-') === 0) ui.drafts['m' + t.id.slice(2)] = t.value;
+    if (t.id === 'vq') { ui.filters.q = t.value; clearTimeout(ui.qT); ui.qT = setTimeout(function () { var pos = t.selectionStart; render(); var n = $('#vq'); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch (x) { /* ok */ } } }, 250); }
+    if (t.id === 'aq') { ui.filters.aq = t.value; clearTimeout(ui.qT); ui.qT = setTimeout(function () { var pos = t.selectionStart; render(); var n = $('#aq'); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch (x) { /* ok */ } } }, 250); }
+    if (t.dataset.meta) { var k = 'meta' + t.dataset.id; ui.drafts[k] = ui.drafts[k] || {}; ui.drafts[k][t.dataset.meta] = t.value; }
+    if (t.dataset.itf) { var k2 = 'it' + t.dataset.id; ui.drafts[k2] = ui.drafts[k2] || {}; ui.drafts[k2][t.dataset.itf] = t.value; }
+    if (t.dataset.gval) { ui.drafts['g' + t.dataset.gval] = t.value; }
+  });
+  document.addEventListener('change', function (e) {
+    var t = e.target;
+    if (t.dataset.tpl) { var tp = (S().templates || []).filter(function (x) { return x.id === t.value; })[0]; if (tp) { var ta = $('#a-' + CSS.escape(t.dataset.tpl)); ta.value = tp.text; ui.drafts[t.dataset.tpl] = tp.text; } t.value = ''; }
+    if (t.dataset.mtpl) { var tm = (S().templates || []).filter(function (x) { return x.id === t.value; })[0]; var o = S().orders.filter(function (x) { return x.id === t.dataset.mtpl; })[0]; if (tm) { var tb = $('#m-' + CSS.escape(t.dataset.mtpl)); tb.value = fillTpl(tm.text, o); ui.drafts['m' + t.dataset.mtpl] = tb.value; } t.value = ''; }
+    if (t.dataset.gval) render();
+    if (t.dataset.pref) {
+      st.pushPrefs = st.pushPrefs || {}; st.pushPrefs[t.dataset.pref] = t.checked; st.pushAt = 0; save();
+      navigator.serviceWorker.ready.then(function (reg) { return reg.pushManager.getSubscription(); }).then(function (sub) { if (sub) return putSub(sub); }).then(function () { toast('Preferências salvas.'); }, function (er) { toast(er.message, true); });
     }
-    if (!st.access) {
-      app.innerHTML = '<div class="login"><div style="width:72px">' + mark + '</div><h1>' + esc(st.teamName || 'Ponte') + '</h1><p class="muted">Entre com o e-mail e a senha que você usa na equipe do Ponte.</p>' +
-        '<label>E-mail</label><input id="em" type="email" autocomplete="username" value="' + esc(st.email || '') + '">' +
-        '<label>Senha</label><input id="pw" type="password" autocomplete="current-password">' +
-        '<p id="lerr" class="small" style="color:var(--loss)"></p><button class="btn main block" id="go">Entrar</button></div>';
-      $('#go').onclick = function () {
-        this.disabled = true;
-        var b = this;
-        login($('#em').value.trim(), $('#pw').value).then(function () { poll(); render(); }).catch(function (e) { $('#lerr').textContent = e.message; b.disabled = false; });
-      };
-      return;
-    }
-    var s = ui.moved ? null : ui.snap; // mudou de servidor: os dados antigos não valem mais
-    var qs = s ? s.questions.filter(function (q) { return visible(q.itemId); }) : [];
-    var orders = s ? s.orders.filter(function (o) { return o.items.some(function (i) { return visible(i.id); }); }) : [];
-    var toBuy = orders.filter(function (o) { return o.meta.status === 'novo' && o.status !== 'cancelled'; });
-    var age = s && s.at ? (Date.now() - new Date(s.at).getTime()) / 60000 : null;
-    var online = age !== null && age < 10;
-    var html = '<header><div style="width:34px">' + mark + '</div><h1>' + esc(st.teamName || 'Ponte') + '</h1><span class="status"><span class="dot ' + (online ? 'on' : '') + '"></span>' + (s ? (online ? 'loja online' : 'atualizado ' + ago(s.at)) : 'conectando…') + '</span></header><main>';
-    if (ui.lastErr) html += '<div class="card small" style="color:var(--loss)">' + esc(ui.lastErr) + '</div>';
-    if (ui.moved) {
-      html += '<div class="card"><div class="t">A equipe mudou de servidor</div><p class="small muted">' + esc(ui.moved.by || 'O dono') + ' levou a equipe para um servidor novo. Digite sua senha para continuar (se ainda não tem cadastro lá, ele é criado agora com esta senha).</p>' +
-        '<input id="mvp" type="password" placeholder="Sua senha" autocomplete="current-password"><p id="mverr" class="small" style="color:var(--loss)"></p><div class="acts"><button class="btn main" id="mvgo">Continuar</button></div></div>';
-    }
-    if (!s && !ui.lastErr && !ui.moved) {
-      var w = ui.worker;
-      html += '<div class="empty"><b>Esperando o computador da loja mandar os dados…</b><br><br>' + (w && w.name
-        ? 'O computador principal da equipe é o de <b>' + esc(w.name) + '</b>' + (w.app ? ' (Ponte ' + esc(w.app) + ')' : '') + '. ' + (!w.app || /^1\.[0-5]\./.test(w.app) ? 'Ele está com uma versão antiga do Ponte: abra o Ponte nele e clique em <b>Reiniciar e atualizar</b>.' : 'Os dados chegam em até 1 minuto.')
-        : 'Nenhum computador da equipe está com o Ponte aberto agora. Abra o Ponte no computador principal (ou na VM) e espere 1 minuto.') + '</div>';
-    }
-    if (s && ui.tab === 'perguntas') {
-      if (!qs.length) html += '<div class="empty">Nenhuma pergunta esperando resposta. 🎉</div>';
-      qs.forEach(function (q) {
-        html += '<div class="card"><div class="row">' + (q.thumb ? '<img class="thumb" src="' + esc(q.thumb) + '" alt="">' : '<div class="thumb"></div>') + '<div style="min-width:0;flex:1"><div class="t ell">' + esc(q.itemTitle) + '</div><div class="small muted">' + (q.price != null ? brl(q.price) + ' · ' : '') + esc(q.acc || '') + ' · ' + ago(q.date) + '</div></div></div>' +
-          '<div class="q">“' + esc(q.text) + '”</div>' +
-          (can('atendimento') ? '<textarea id="a-' + esc(q.id) + '" placeholder="Escreva a resposta…">' + esc(ui.drafts[q.id] || '') + '</textarea><div class="acts"><button class="btn main" data-ans="' + esc(q.id) + '"' + (ui.busy[q.id] ? ' disabled' : '') + '>' + (ui.busy[q.id] ? 'Enviando…' : 'Responder') + '</button></div>' : '<div class="small muted">Sem permissão para responder.</div>') + '</div>';
-      });
-    }
-    if (s && ui.tab === 'vendas') {
-      html += '<div class="seg"><button class="' + (ui.ordersTab === 'novo' ? 'on' : '') + '" data-ot="novo">A comprar (' + toBuy.length + ')</button><button class="' + (ui.ordersTab === 'todas' ? 'on' : '') + '" data-ot="todas">Todas</button></div>';
-      var list = ui.ordersTab === 'novo' ? toBuy : orders;
-      if (!list.length) html += '<div class="empty">Nada por aqui.</div>';
-      list.slice(0, 60).forEach(function (o) {
-        var i0 = o.items[0] || {};
-        html += '<div class="card"><div class="row">' + (i0.thumb ? '<img class="thumb" src="' + esc(i0.thumb) + '" alt="">' : '<div class="thumb"></div>') + '<div style="min-width:0;flex:1"><div class="t ell">' + esc(i0.title) + '</div><div class="small muted">' + o.items.map(function (i) { return i.qty + '× ' + (i.variation ? esc(i.variation) : ''); }).join(' + ') + ' · ' + esc(o.buyer) + ' · ' + ago(o.date) + '</div></div>' +
-          '<span class="chip ' + (o.meta.status === 'novo' ? 'sale' : 'gain') + '">' + ({ novo: 'A comprar', comprado: 'Comprado', enviado: 'Enviado', entregue: 'Entregue', problema: 'Problema' }[o.meta.status] || o.meta.status) + '</span></div>' +
-          (o.meta.statusBy ? '<div class="small muted" style="margin-top:6px">por ' + esc(o.meta.statusBy) + '</div>' : '') +
-          (o.addr ? '<div class="addr"><b>' + esc(o.addr.name) + '</b><br>' + esc(o.addr.line) + '<br>' + esc(o.addr.city) + ' · CEP ' + esc(o.addr.zip) + '</div>' : '') +
-          '<div class="acts">' + (o.link ? '<a class="btn sup" href="' + esc(o.link.url) + '" target="_blank" rel="noopener">Comprar' + (o.link.label ? ' no ' + esc(o.link.label) : '') + '</a>' : '') +
-          (o.addr ? '<button class="btn" data-copy="' + esc(o.id) + '">Copiar endereço</button>' : '') +
-          (o.meta.status === 'novo' && can('pedidos') ? '<button class="btn main" data-buy="' + esc(o.id) + '"' + (ui.busy[o.id] ? ' disabled' : '') + '>' + (ui.busy[o.id] ? '…' : 'Marcar comprado') + '</button>' : '') + '</div></div>';
-      });
-    }
-    if (ui.tab === 'conta') {
-      html += '<div class="card"><div class="t">' + esc((ui.me && ui.me.name) || st.email) + '</div><div class="small muted">' + esc(st.email || '') + ' · ' + (ui.me && ui.me.role === 'owner' ? 'Dono' : 'Equipe') + '</div>' +
-        '<p class="small muted">Dica: no navegador do celular, use “Adicionar à tela inicial” para abrir o Ponte como um app.</p><button class="btn block" id="out">Sair</button></div>';
-    }
-    html += '</main><nav>' +
-      '<button class="' + (ui.tab === 'perguntas' ? 'on' : '') + '" data-tab="perguntas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Perguntas' + (qs.length ? '<span class="badge">' + qs.length + '</span>' : '') + '</button>' +
-      '<button class="' + (ui.tab === 'vendas' ? 'on' : '') + '" data-tab="vendas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Vendas' + (toBuy.length ? '<span class="badge">' + toBuy.length + '</span>' : '') + '</button>' +
-      '<button class="' + (ui.tab === 'conta' ? 'on' : '') + '" data-tab="conta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Conta</button></nav>';
-    var keep = {};
-    document.querySelectorAll('textarea[id^="a-"],#mvp').forEach(function (t) { keep[t.id] = t.value; });
-    app.innerHTML = html;
-    Object.keys(keep).forEach(function (id) { var t = document.getElementById(id); if (t) t.value = keep[id]; });
-    var mvgo = $('#mvgo');
-    if (mvgo) mvgo.onclick = function () {
-      var b = this; b.disabled = true; b.textContent = 'Entrando…';
-      followMove($('#mvp').value).then(function () { toast('Pronto: o celular já usa o servidor novo.'); poll(); render(); })
-        .catch(function (e) { b.disabled = false; b.textContent = 'Continuar'; var el = $('#mverr'); if (el) el.textContent = e.message; });
-    };
-  }
-
-  document.addEventListener('input', function (e) { if (e.target.id && e.target.id.indexOf('a-') === 0) ui.drafts[e.target.id.slice(2)] = e.target.value; });
+  });
   document.addEventListener('click', function (e) {
-    var t = e.target.closest('[data-tab],[data-ot],[data-ans],[data-buy],[data-copy],#out');
-    if (!t) return;
-    if (t.dataset.tab) { ui.tab = t.dataset.tab; render(); window.scrollTo(0, 0); return; }
-    if (t.dataset.ot) { ui.ordersTab = t.dataset.ot; render(); return; }
-    if (t.id === 'out') { st.access = null; st.refresh = null; save(); render(); return; }
-    if (t.dataset.copy) {
-      var o = ui.snap.orders.find(function (x) { return x.id === t.dataset.copy; });
-      var txt = o.addr.name + '\n' + o.addr.line + '\n' + o.addr.city + '\nCEP ' + o.addr.zip;
-      (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { toast('Endereço copiado.'); }).catch(function () { toast(txt); });
-      return;
-    }
+    var t = e.target.closest('[data-go],[data-vf],[data-af],[data-ans],[data-ai],[data-copy],[data-status],[data-savemeta],[data-send],[data-reloadmsg],[data-saveit],[data-itstatus],[data-gstep],[data-gsave],[data-greset],[data-push],[data-refresh],#out');
+    if (!t || t.disabled) return;
+    if (t.tagName === 'A') return;
+    if (t.dataset.vf && t.dataset.go) { ui.filters.vendas = t.dataset.vf; }
+    if (t.dataset.af && t.dataset.go) { ui.filters.anuncios = t.dataset.af; }
+    if (t.dataset.go) { go(t.dataset.go); return; }
+    if (t.dataset.vf) { ui.filters.vendas = t.dataset.vf; render(); return; }
+    if (t.dataset.af) { ui.filters.anuncios = t.dataset.af; render(); return; }
+    if (t.id === 'out') { if (st.pushOn) disablePush().catch(function () { return null; }); st.access = null; st.refresh = null; ui.snap = null; ui.me = null; save(); try { localStorage.removeItem(KEY + '-snap'); } catch (x) { /* ok */ } render(); return; }
+    if (t.dataset.copy) { copy(t.dataset.copy, t.dataset.what); return; }
     if (t.dataset.ans) {
       var id = t.dataset.ans;
-      var text = (document.getElementById('a-' + id) || {}).value || '';
-      if (!text.trim()) { toast('Escreva a resposta.'); return; }
-      ui.busy[id] = true; render();
-      command({ type: 'answer', qid: id, text: text.trim() }).then(function () {
-        toast('Resposta publicada no Mercado Livre.');
-        ui.snap.questions = ui.snap.questions.filter(function (q) { return q.id !== id; });
-        delete ui.drafts[id];
-      }).catch(function (err) { toast(err.message); }).then(function () { delete ui.busy[id]; render(); });
+      var text = ($('#a-' + CSS.escape(id)) || {}).value || '';
+      if (!text.trim()) { toast('Escreva a resposta.', true); return; }
+      busy(id, function () { return command({ type: 'answer', qid: id, text: text.trim() }).then(function () { delete ui.drafts[id]; if (ui.snap) ui.snap.questions = ui.snap.questions.filter(function (q) { return q.id !== id; }); }); }, 'Resposta publicada no Mercado Livre.');
       return;
     }
-    if (t.dataset.buy) {
-      var oid = t.dataset.buy;
-      ui.busy[oid] = true; render();
-      command({ type: 'status', orderId: oid, orderStatus: 'comprado' }).then(function () {
-        toast('Venda marcada como comprada.');
-        var o = ui.snap.orders.find(function (x) { return x.id === oid; }); if (o) o.meta.status = 'comprado';
-      }).catch(function (err) { toast(err.message); }).then(function () { delete ui.busy[oid]; render(); });
+    if (t.dataset.ai) {
+      var qid = t.dataset.ai;
+      busy('ai' + qid, function () { return command({ type: 'ai', qid: qid }).then(function (r) { ui.drafts[qid] = r.text || ''; var ta = $('#a-' + CSS.escape(qid)); if (ta) ta.value = r.text || ''; }); }, 'Sugestão pronta: confira antes de responder.');
+      return;
     }
+    if (t.dataset.status) {
+      var oid = t.dataset.id, next = t.dataset.status;
+      var o = S().orders.filter(function (x) { return x.id === oid; })[0];
+      if (o && o.meta.status === next) return;
+      var md = ui.drafts['meta' + oid] || {};
+      busy('st' + oid, function () { return command({ type: 'status', orderId: oid, orderStatus: next, supplierOrderId: md.supplierOrderId || undefined }).then(function () { if (o) { o.meta.status = next; o.meta.statusBy = (ui.me && ui.me.name) || ''; o.meta.statusAt = new Date().toISOString(); } }); }, 'Venda marcada como ' + STATUS[next].toLowerCase() + '.');
+      return;
+    }
+    if (t.dataset.savemeta) {
+      var mid = t.dataset.savemeta;
+      var patch = ui.drafts['meta' + mid] || {};
+      if (!Object.keys(patch).length) { toast('Nada mudou.'); return; }
+      busy('mt' + mid, function () { return command({ type: 'meta', orderId: mid, patch: patch }).then(function () { var o2 = S().orders.filter(function (x) { return x.id === mid; })[0]; if (o2) Object.keys(patch).forEach(function (k) { o2.meta[k] = patch[k]; }); delete ui.drafts['meta' + mid]; }); }, 'Dados da venda salvos.');
+      return;
+    }
+    if (t.dataset.reloadmsg) { delete ui.msgs[t.dataset.reloadmsg]; render(); return; }
+    if (t.dataset.send) {
+      var so = t.dataset.send;
+      var txt = ($('#m-' + CSS.escape(so)) || {}).value || '';
+      if (!txt.trim()) { toast('Escreva a mensagem.', true); return; }
+      busy('ms' + so, function () { return command({ type: 'message', orderId: so, text: txt.trim() }).then(function () { delete ui.drafts['m' + so]; var conv = ui.msgs[so]; if (conv && conv.messages) conv.messages.push({ fromSeller: true, text: txt.trim(), date: new Date().toISOString() }); var ta = $('#m-' + CSS.escape(so)); if (ta) ta.value = ''; }); }, 'Mensagem enviada.');
+      return;
+    }
+    if (t.dataset.saveit) {
+      var iid = t.dataset.saveit;
+      var it = S().items.filter(function (x) { return x.id === iid; })[0];
+      var dd = ui.drafts['it' + iid] || {};
+      var cmd = { type: 'item_edit', itemId: iid };
+      if (dd.price !== undefined) { var pz = num(dd.price); if (!(pz > 0)) { toast('Preço inválido.', true); return; } if (Math.abs(pz - it.price) > 0.001) cmd.price = pz; }
+      if (it.variations.length) { var vs = it.variations.filter(function (v) { return dd['v' + v.id] !== undefined && Math.round(num(dd['v' + v.id])) !== (v.available || 0); }); if (vs.length) cmd.variations = it.variations.map(function (v) { return { id: v.id, available: dd['v' + v.id] !== undefined ? Math.round(num(dd['v' + v.id])) : v.available }; }); }
+      else if (dd.available !== undefined && Math.round(num(dd.available)) !== (it.available || 0)) cmd.available = Math.round(num(dd.available));
+      if (cmd.price === undefined && !cmd.variations && cmd.available === undefined) { toast('Nada mudou.'); return; }
+      busy('it' + iid, function () { return command(cmd).then(function (r) { delete ui.drafts['it' + iid]; if (cmd.price) it.price = cmd.price; if (cmd.available !== undefined) it.available = cmd.available; if (cmd.variations) cmd.variations.forEach(function (v) { var x = it.variations.filter(function (y) { return y.id === v.id; })[0]; if (x) x.available = v.available; }); return r; }); }, function (r) { return r && r.routed && r.routed.length ? 'Salvo: o estoque físico do grupo mudou e as outras contas foram atualizadas.' : 'Salvo no Mercado Livre.'; });
+      return;
+    }
+    if (t.dataset.itstatus) {
+      var sid = t.dataset.id, ns = t.dataset.itstatus;
+      busy('is' + sid, function () { return command({ type: 'item_status', itemId: sid, itemStatus: ns }).then(function () { var x = S().items.filter(function (y) { return y.id === sid; })[0]; if (x) x.status = ns; }); }, ns === 'paused' ? 'Anúncio pausado.' : 'Anúncio reativado.');
+      return;
+    }
+    if (t.dataset.gstep) {
+      var gid = t.dataset.g;
+      var g = (S().stock.groups || []).filter(function (x) { return x.id === gid; })[0];
+      var cur = ui.drafts['g' + gid] !== undefined ? Number(ui.drafts['g' + gid]) : g.physical;
+      ui.drafts['g' + gid] = Math.max(0, (Number(cur) || 0) + Number(t.dataset.gstep));
+      render(); return;
+    }
+    if (t.dataset.greset) { delete ui.drafts['g' + t.dataset.greset]; render(); return; }
+    if (t.dataset.gsave) {
+      var gs = t.dataset.gsave;
+      var val = Math.max(0, Math.round(Number(ui.drafts['g' + gs]) || 0));
+      busy('g' + gs, function () { return command({ type: 'stock', groupId: gs, physical: val }).then(function () { var g2 = (S().stock.groups || []).filter(function (x) { return x.id === gs; })[0]; if (g2) g2.physical = val; delete ui.drafts['g' + gs]; }); }, 'Estoque físico salvo. Os anúncios do grupo foram atualizados.');
+      return;
+    }
+    if (t.dataset.push) {
+      if (t.dataset.push === 'on') busy('push', function () { return enablePush(); }, 'Notificações ativadas neste celular.');
+      else disablePush().then(function () { toast('Notificações desligadas.'); render(); });
+      return;
+    }
+    if (t.dataset.refresh) { busy('refresh', function () { return command({ type: 'refresh' }); }, 'Pronto: dados atualizados.'); return; }
   });
 
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () { /* sem cache offline */ });
