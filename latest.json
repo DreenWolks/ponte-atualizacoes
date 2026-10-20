@@ -1,10 +1,10 @@
 {
-  "version": "1.7.0",
-  "file": "app-1.7.0.asar",
-  "sha256": "2906b31f0e2f0486b9f4ac43c5be771c4e5b6613cf2674db2f2629569716d510",
-  "size": 1331559,
+  "version": "1.7.1",
+  "file": "app-1.7.1.asar",
+  "sha256": "7e481e8512ad54bec5bd05dfcf92186094778f5f8cb598778da255c47064de5a",
+  "size": 1332282,
   "requiresBundle": "1.2.0",
-  "notes": "Celular completo: vendas com fornecedores e lucro, compras por fornecedor, atendimento com IA e mensagens, anúncios e estoque, e notificações no celular.",
+  "notes": "Celular funciona também com o banco antigo; o computador percebe sozinho quando o banco é atualizado.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-20T19:50:46.738Z"
+  "publishedAt": "2026-10-20T20:43:51.479Z"
 }

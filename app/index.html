@@ -199,6 +199,20 @@
       return r.body;
     });
   }
+  // lê um documento; "p_since" só existe no banco versão 5: no banco antigo, pede sem ele
+  function getDoc(kind, key, since) {
+    var args = { p_team: st.team, p_kind: kind, p_key: key };
+    var withSince = typeof since === 'number' && !ui.noSince;
+    if (withSince) args.p_since = since;
+    return rpc('ponte_get', args).catch(function (e) {
+      if (withSince && /does not exist|could not find the function|p_since/i.test(e.message)) {
+        ui.noSince = true; ui.oldDb = true;
+        delete args.p_since;
+        return rpc('ponte_get', args);
+      }
+      throw e;
+    });
+  }
   function login(email, pass) {
     return api('/auth/v1/token?grant_type=password', { email: email, password: pass }, false).then(function (r) {
       if (!r.ok) throw new Error(errText(r.body));
@@ -228,15 +242,15 @@
     polling = true;
     var order = variantsFor(ui.me);
     var tryKey = function (i) {
-      if (i >= order.length) return rpc('ponte_get', { p_team: st.team, p_kind: 'mobile', p_key: 'snap' }).then(function (r) { return { key: 'snap', r: r }; });
+      if (i >= order.length) return getDoc('mobile', 'snap').then(function (r) { return { key: 'snap', r: r }; });
       var k = order[i];
-      return rpc('ponte_get', { p_team: st.team, p_kind: 'mobile', p_key: k, p_since: ui.vkey === k && ui.snap ? ui.snapVer || null : null }).then(function (r) {
+      return getDoc('mobile', k, ui.vkey === k && ui.snap && typeof ui.snapVer === 'number' ? ui.snapVer : null).then(function (r) {
         if (r && r.me) ui.me = r.me;
         if (r && (r.unchanged || (r.data && !r.deleted))) return { key: k, r: r };
         return tryKey(i + 1);
       });
     };
-    Promise.all([tryKey(0), rpc('ponte_get', { p_team: st.team, p_kind: 'moved', p_key: 'all' }).catch(function () { return null; })]).then(function (res) {
+    Promise.all([tryKey(0), getDoc('moved', 'all').catch(function () { return null; })]).then(function (res) {
       var got = res[0], r = got.r;
       ui.lastErr = null;
       ui.worker = r ? r.worker || null : null;
@@ -271,7 +285,7 @@
       var tries = 0;
       return new Promise(function (resolve, reject) {
         (function check() {
-          rpc('ponte_get', { p_team: st.team, p_kind: 'cmd', p_key: key }).then(function (d) {
+          getDoc('cmd', key).then(function (d) {
             var s = d && d.data && d.data.status;
             if (s === 'done') { poll(1500); return resolve(d.data.result || {}); }
             if (s === 'error') return reject(new Error(d.data.error || 'Não deu certo.'));
@@ -330,6 +344,7 @@
         : 'Nenhum computador da equipe está com o Ponte aberto agora. Abra o Ponte no computador principal (ou na VM) e espere 1 minuto.') + '</div>';
     }
     if (!ui.loaded && !ui.snap) html += '<div class="spin"></div>';
+    if ((ui.oldDb || (ui.snap && ui.snap.schema && ui.snap.schema < 5)) && ui.me && ui.me.role === 'owner') html += '<div class="banner">O banco da equipe ainda está na versão antiga. Até ele ser atualizado, o celular mostra só os anúncios compartilhados, sem custos, e algumas ações e as notificações ficam indisponíveis. ' + (/supabase\.co/.test(st.url) ? 'No Supabase, rode de novo o arquivo ponte-equipe.sql (SQL Editor → New query → colar → Run).' : 'O Ponte Servidor se atualiza sozinho em algumas horas; para ser agora, reinicie a VM.') + '</div>';
     if (ui.snap && ui.snap.old) html += '<div class="banner">O computador principal está com uma versão antiga do Ponte: só aparecem perguntas e vendas. Atualize o Ponte nele para ver tudo.</div>';
     return html;
   }
@@ -733,7 +748,7 @@
   function followMove(pass) {
     var mv = ui.moved, base = { url: mv.url.replace(/\/+$/, ''), key: mv.key };
     var sub = mySub();
-    var tokP = sub ? rpc('ponte_get', { p_team: st.team, p_kind: 'moved', p_key: sub }).then(function (d) { return d && d.data ? d.data.token : null; }, function () { return null; }) : Promise.resolve(null);
+    var tokP = sub ? getDoc('moved', sub).then(function (d) { return d && d.data ? d.data.token : null; }, function () { return null; }) : Promise.resolve(null);
     return tokP.then(function (tok) {
       return apiAt(base, '/auth/v1/token?grant_type=password', { email: st.email, password: pass }).then(function (r) {
         if (r.ok) return r;
