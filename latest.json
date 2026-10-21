@@ -1,10 +1,10 @@
 {
-  "version": "1.7.1",
-  "file": "app-1.7.1.asar",
-  "sha256": "7e481e8512ad54bec5bd05dfcf92186094778f5f8cb598778da255c47064de5a",
-  "size": 1332282,
+  "version": "1.8.0",
+  "file": "app-1.8.0.asar",
+  "sha256": "a7aa8622d491f7707c3617f6673723b7423280aa7c1aab32c0aa1fa3ef20ed7c",
+  "size": 1346264,
   "requiresBundle": "1.2.0",
-  "notes": "Celular funciona também com o banco antigo; o computador percebe sozinho quando o banco é atualizado.",
+  "notes": "Modo dropshipping: o Ponte mostra só o que ajuda no drop. Novo Estoque pronto: o anúncio vende as unidades em mãos e, quando acabam, volta sozinho sob encomenda com prazo.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-20T20:43:51.479Z"
+  "publishedAt": "2026-10-21T13:03:49.579Z"
 }
