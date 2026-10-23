@@ -1,10 +1,10 @@
 {
-  "version": "1.8.0",
-  "file": "app-1.8.0.asar",
-  "sha256": "a7aa8622d491f7707c3617f6673723b7423280aa7c1aab32c0aa1fa3ef20ed7c",
-  "size": 1346264,
+  "version": "1.9.0",
+  "file": "app-1.9.0.asar",
+  "sha256": "946d3de99525fd030d66bc3957d6f3434d8e53ebe517bae2a56d3de2a1b0d260",
+  "size": 1383834,
   "requiresBundle": "1.2.0",
-  "notes": "Modo dropshipping: o Ponte mostra só o que ajuda no drop. Novo Estoque pronto: o anúncio vende as unidades em mãos e, quando acabam, volta sozinho sob encomenda com prazo.",
+  "notes": "Nota fiscal pelo emissor do próprio Mercado Livre (sem Focus NFe): o Ponte envia os dados fiscais dos anúncios (NCM, origem, CSOSN), emite a NF-e da venda, baixa DANFE/XML e imprime a etiqueta. Opção de emitir sozinho quando o ML espera a nota para liberar a etiqueta. Etiquetas também na tela de Vendas no modo dropshipping.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-21T13:03:49.579Z"
+  "publishedAt": "2026-10-23T21:12:56.152Z"
 }
