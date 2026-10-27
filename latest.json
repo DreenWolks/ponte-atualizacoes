@@ -1,10 +1,10 @@
 {
-  "version": "1.10.1",
-  "file": "app-1.10.1.asar",
-  "sha256": "0198a8ffe5c6c79fe5822ebb1e4b8d7e02ac5b4a0c5bc6773adae10efcc06928",
-  "size": 1434119,
+  "version": "1.10.2",
+  "file": "app-1.10.2.asar",
+  "sha256": "51c951023f91289728b40c033cb502551e6e5514d73aac7e881bc81df8a9cfd9",
+  "size": 1434135,
   "requiresBundle": "1.2.0",
-  "notes": "Corrige a leitura do LinxPOS (erro 'Não é possível localizar o histórico para a linha de comando').",
+  "notes": "Corrige a leitura do LinxPOS no Windows.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-27T17:29:10.315Z"
+  "publishedAt": "2026-10-27T17:34:41.941Z"
 }
