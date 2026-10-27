@@ -1,10 +1,10 @@
 {
-  "version": "1.9.0",
-  "file": "app-1.9.0.asar",
-  "sha256": "946d3de99525fd030d66bc3957d6f3434d8e53ebe517bae2a56d3de2a1b0d260",
-  "size": 1383834,
+  "version": "1.10.0",
+  "file": "app-1.10.0.asar",
+  "sha256": "05c6e5591eb4d2ed35073d60e329e005846fac02d5f117759ab956e1be9eccf9",
+  "size": 1433732,
   "requiresBundle": "1.2.0",
-  "notes": "Nota fiscal pelo emissor do próprio Mercado Livre (sem Focus NFe): o Ponte envia os dados fiscais dos anúncios (NCM, origem, CSOSN), emite a NF-e da venda, baixa DANFE/XML e imprime a etiqueta. Opção de emitir sozinho quando o ML espera a nota para liberar a etiqueta. Etiquetas também na tela de Vendas no modo dropshipping.",
+  "notes": "Loja física (LinxPOS): a Ponte instalada no computador da loja lê o estoque do Linx (só leitura) a cada minuto e o computador principal ajusta as unidades prontas dos anúncios ligados pelo código de barras. Vendas do ML aguardando baixa no caixa são descontadas; a baixa é reconhecida sozinha pelo tipo de venda escolhido.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-23T21:12:56.152Z"
+  "publishedAt": "2026-10-27T16:44:37.100Z"
 }
