@@ -1,10 +1,10 @@
 {
-  "version": "1.10.0",
-  "file": "app-1.10.0.asar",
-  "sha256": "05c6e5591eb4d2ed35073d60e329e005846fac02d5f117759ab956e1be9eccf9",
-  "size": 1433732,
+  "version": "1.10.1",
+  "file": "app-1.10.1.asar",
+  "sha256": "0198a8ffe5c6c79fe5822ebb1e4b8d7e02ac5b4a0c5bc6773adae10efcc06928",
+  "size": 1434119,
   "requiresBundle": "1.2.0",
-  "notes": "Loja física (LinxPOS): a Ponte instalada no computador da loja lê o estoque do Linx (só leitura) a cada minuto e o computador principal ajusta as unidades prontas dos anúncios ligados pelo código de barras. Vendas do ML aguardando baixa no caixa são descontadas; a baixa é reconhecida sozinha pelo tipo de venda escolhido.",
+  "notes": "Corrige a leitura do LinxPOS (erro 'Não é possível localizar o histórico para a linha de comando').",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-27T16:44:37.100Z"
+  "publishedAt": "2026-10-27T17:29:10.315Z"
 }
