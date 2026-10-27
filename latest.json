@@ -1,10 +1,10 @@
 {
-  "version": "1.10.2",
-  "file": "app-1.10.2.asar",
-  "sha256": "51c951023f91289728b40c033cb502551e6e5514d73aac7e881bc81df8a9cfd9",
-  "size": 1434135,
+  "version": "1.11.0",
+  "file": "app-1.11.0.asar",
+  "sha256": "9d36aa30089c48c1451ce83808a879d04e56494eff2a8253327479dccd7d6253",
+  "size": 1453108,
   "requiresBundle": "1.2.0",
-  "notes": "Corrige a leitura do LinxPOS no Windows.",
+  "notes": "Criar anúncio a partir da loja (Linx): escolha o produto pelo nome, referência ou código de barras e o rascunho já vem com título, marca, cores, tamanhos, códigos de barras, preço da loja, descrição e fotos do Linx. Ao publicar, o anúncio fica ligado ao estoque da loja e o NCM vai para o emissor de notas do Mercado Livre.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-27T17:34:41.941Z"
+  "publishedAt": "2026-10-27T18:02:46.367Z"
 }
