@@ -1,10 +1,10 @@
 {
-  "version": "1.11.0",
-  "file": "app-1.11.0.asar",
-  "sha256": "9d36aa30089c48c1451ce83808a879d04e56494eff2a8253327479dccd7d6253",
-  "size": 1453108,
+  "version": "1.12.0",
+  "file": "app-1.12.0.asar",
+  "sha256": "01d8a7cdee91750890cdf90a4bccae7cbe4bce60751cdceead8a7209dee299b0",
+  "size": 1473210,
   "requiresBundle": "1.2.0",
-  "notes": "Criar anúncio a partir da loja (Linx): escolha o produto pelo nome, referência ou código de barras e o rascunho já vem com título, marca, cores, tamanhos, códigos de barras, preço da loja, descrição e fotos do Linx. Ao publicar, o anúncio fica ligado ao estoque da loja e o NCM vai para o emissor de notas do Mercado Livre.",
+  "notes": "Criar anúncio: variações organizadas por cor, com fotos (enviar ou arrastar) e preço de cada cor, estoque, SKU e código de barras de cada tamanho ou numeração, e opção de publicar um anúncio para cada cor.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-27T18:02:46.367Z"
+  "publishedAt": "2026-10-28T15:38:39.394Z"
 }
