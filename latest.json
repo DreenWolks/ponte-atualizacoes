@@ -1,10 +1,10 @@
 {
-  "version": "1.12.0",
-  "file": "app-1.12.0.asar",
-  "sha256": "01d8a7cdee91750890cdf90a4bccae7cbe4bce60751cdceead8a7209dee299b0",
-  "size": 1473210,
+  "version": "1.13.0",
+  "file": "app-1.13.0.asar",
+  "sha256": "f884d23183d3be8aa60a01966aec2ba8e351373a9135e644f60a6c05f0fe35cc",
+  "size": 1485233,
   "requiresBundle": "1.2.0",
-  "notes": "Criar anúncio: variações organizadas por cor, com fotos (enviar ou arrastar) e preço de cada cor, estoque, SKU e código de barras de cada tamanho ou numeração, e opção de publicar um anúncio para cada cor.",
+  "notes": "Criar anúncio: cada cor escolhe como vender (estoque da loja, pronta e depois sob encomenda, ou só sob encomenda), com unidades e prazo próprios; estoque de cada tamanho editável (guardar peças para o balcão ou somar peças fora do Linx); ajuste do estoque online no Estoque pronto.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-28T15:38:39.394Z"
+  "publishedAt": "2026-10-28T17:00:35.556Z"
 }
