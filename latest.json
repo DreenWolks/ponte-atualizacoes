@@ -1,10 +1,10 @@
 {
-  "version": "1.13.0",
-  "file": "app-1.13.0.asar",
-  "sha256": "f884d23183d3be8aa60a01966aec2ba8e351373a9135e644f60a6c05f0fe35cc",
-  "size": 1485233,
+  "version": "1.14.0",
+  "file": "app-1.14.0.asar",
+  "sha256": "5712fad4bbe749ad869685e31351fd9bb9b45cf821185e6d0c7e363fa646dee5",
+  "size": 1496547,
   "requiresBundle": "1.2.0",
-  "notes": "Criar anúncio: cada cor escolhe como vender (estoque da loja, pronta e depois sob encomenda, ou só sob encomenda), com unidades e prazo próprios; estoque de cada tamanho editável (guardar peças para o balcão ou somar peças fora do Linx); ajuste do estoque online no Estoque pronto.",
+  "notes": "Loja física (Linx): o anúncio criado a partir da loja já vem com o código de barras (EAN) certo de cada cor e tamanho, ficha técnica preenchida com o que o Linx tem (marca, modelo/ref. do fabricante, linha, material, gênero, peso e medidas) e o EAN de cada variação vai também para a nota fiscal.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-28T17:00:35.556Z"
+  "publishedAt": "2026-10-28T20:29:26.147Z"
 }
