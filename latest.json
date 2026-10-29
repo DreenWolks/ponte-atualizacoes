@@ -1,10 +1,10 @@
 {
-  "version": "1.15.0",
-  "file": "app-1.15.0.asar",
-  "sha256": "7c41f79e0f8843980b9c75f16071672f6f403fac635ab4e28dfb9b77732621c8",
-  "size": 1549467,
+  "version": "1.15.1",
+  "file": "app-1.15.1.asar",
+  "sha256": "8ad09f2131fb2b255f5be2362034e00f768f193eefd15ca69e58fe7031f46a50",
+  "size": 1549431,
   "requiresBundle": "1.2.0",
-  "notes": "Loja física: bipagem na Ponte. Conte as peças da loja com o leitor de código de barras (ou importe o arquivo do coletor) e a Ponte passa a usar essa contagem no lugar do estoque do Linx. Cada contagem substitui a anterior do produto (não soma) e as vendas do caixa e do Mercado Livre descontam sozinhas depois dela.",
+  "notes": "Loja física: o estoque da loja é só o que você bipa na Ponte (a quantidade do Linx não é mais usada). As vendas do caixa saem da Ponte sozinhas, e os anúncios com os códigos bipados ficam ligados à loja.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-29T14:21:20.607Z"
+  "publishedAt": "2026-10-29T14:50:53.519Z"
 }
