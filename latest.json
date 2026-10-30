@@ -1,10 +1,10 @@
 {
-  "version": "1.15.1",
-  "file": "app-1.15.1.asar",
-  "sha256": "8ad09f2131fb2b255f5be2362034e00f768f193eefd15ca69e58fe7031f46a50",
-  "size": 1549431,
+  "version": "1.16.0",
+  "file": "app-1.16.0.asar",
+  "sha256": "81df1167d909cae1630f9e4c9d740df8054763b317e18657bdd86ce9d31b8def",
+  "size": 1576045,
   "requiresBundle": "1.2.0",
-  "notes": "Loja física: o estoque da loja é só o que você bipa na Ponte (a quantidade do Linx não é mais usada). As vendas do caixa saem da Ponte sozinhas, e os anúncios com os códigos bipados ficam ligados à loja.",
+  "notes": "Vendas: cada venda mostra a situação no Mercado Livre (a caminho, saiu para entrega, entregue, cancelada e por quem, devolução aberta, em devolução, devolvida, extraviada, não entregue, reclamação e mediação). Nova aba Ocorrências e o motivo da situação dos anúncios.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-29T14:50:53.519Z"
+  "publishedAt": "2026-10-30T20:43:42.127Z"
 }
