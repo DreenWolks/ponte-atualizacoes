@@ -1,10 +1,10 @@
 {
-  "version": "1.16.1",
-  "file": "app-1.16.1.asar",
-  "sha256": "f481ee678014021ca6ee9b8af77321cf9da89b73cfe88156bbfd2b16356a16a1",
-  "size": 1580821,
+  "version": "1.17.0",
+  "file": "app-1.17.0.asar",
+  "sha256": "c62b1c0bbb0821835bd8ec3871cffe4c59dce8cea23a0395b438553474026c3d",
+  "size": 1607467,
   "requiresBundle": "1.2.0",
-  "notes": "Criar anúncio: corrige o erro body.invalid_fields. Nas contas no modelo novo do Mercado Livre, o título vai como nome do produto e cada variação vira um anúncio ligado aos outros. Os erros do ML agora dizem qual campo foi recusado.",
+  "notes": "Criar anúncio: tabela de medidas (guia de tamanhos) e embalagem. A Ponte busca as tabelas de cada conta, escolhe a que tem todos os tamanhos ou cria uma nova, e liga cada tamanho à linha da tabela. Peso e medidas da embalagem ficam na ficha técnica (vêm do Linx quando ele tem).",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-31T13:54:58.910Z"
+  "publishedAt": "2026-10-31T14:35:25.338Z"
 }
