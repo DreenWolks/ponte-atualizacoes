@@ -1,10 +1,10 @@
 {
-  "version": "1.17.1",
-  "file": "app-1.17.1.asar",
-  "sha256": "b18236a97f11b7193654504b3876d7bf4f66079edccf8f517c1360e4e7f4f3bf",
-  "size": 1611042,
+  "version": "1.17.2",
+  "file": "app-1.17.2.asar",
+  "sha256": "d846ded60d485639355d5198ca1b3d2d7a7421a6a6350694d21d74fe902d8770",
+  "size": 1613936,
   "requiresBundle": "1.2.0",
-  "notes": "Tabela de medidas: mostra o motivo exato quando o Mercado Livre recusa a tabela (com botão para copiar) e corrige sozinha os campos que a ficha da tabela não aceita.",
+  "notes": "Tabela de medidas: separa medidas do corpo e medidas da peça (o Mercado Livre não aceita as duas na mesma tabela) e limita o nome a 60 letras.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-31T15:10:48.886Z"
+  "publishedAt": "2026-10-31T15:22:54.018Z"
 }
