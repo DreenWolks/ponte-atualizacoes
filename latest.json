@@ -1,10 +1,10 @@
 {
-  "version": "1.17.0",
-  "file": "app-1.17.0.asar",
-  "sha256": "c62b1c0bbb0821835bd8ec3871cffe4c59dce8cea23a0395b438553474026c3d",
-  "size": 1607467,
+  "version": "1.17.1",
+  "file": "app-1.17.1.asar",
+  "sha256": "b18236a97f11b7193654504b3876d7bf4f66079edccf8f517c1360e4e7f4f3bf",
+  "size": 1611042,
   "requiresBundle": "1.2.0",
-  "notes": "Criar anúncio: tabela de medidas (guia de tamanhos) e embalagem. A Ponte busca as tabelas de cada conta, escolhe a que tem todos os tamanhos ou cria uma nova, e liga cada tamanho à linha da tabela. Peso e medidas da embalagem ficam na ficha técnica (vêm do Linx quando ele tem).",
+  "notes": "Tabela de medidas: mostra o motivo exato quando o Mercado Livre recusa a tabela (com botão para copiar) e corrige sozinha os campos que a ficha da tabela não aceita.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-31T14:35:25.338Z"
+  "publishedAt": "2026-10-31T15:10:48.886Z"
 }
