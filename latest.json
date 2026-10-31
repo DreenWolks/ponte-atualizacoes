@@ -1,10 +1,10 @@
 {
-  "version": "1.17.2",
-  "file": "app-1.17.2.asar",
-  "sha256": "d846ded60d485639355d5198ca1b3d2d7a7421a6a6350694d21d74fe902d8770",
-  "size": 1613936,
+  "version": "1.17.3",
+  "file": "app-1.17.3.asar",
+  "sha256": "8bed8b9fa9ebbe0648f5f3194f60d18d9f736dc1a5c8a5cf7c824a2a43508e62",
+  "size": 1614839,
   "requiresBundle": "1.2.0",
-  "notes": "Tabela de medidas: separa medidas do corpo e medidas da peça (o Mercado Livre não aceita as duas na mesma tabela) e limita o nome a 60 letras.",
+  "notes": "Tabela de medidas: quando o Mercado Livre recusa o nome da tabela, a Ponte tenta sozinha um nome mais curto, sem acentos e símbolos.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-31T15:22:54.018Z"
+  "publishedAt": "2026-10-31T16:03:40.580Z"
 }
