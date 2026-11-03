@@ -1,10 +1,10 @@
 {
-  "version": "1.17.5",
-  "file": "app-1.17.5.asar",
-  "sha256": "f17b6c1b00d5c888fa46abde978fb3ba0d3bad8c54a9a6022f3e57115825dfb5",
-  "size": 1620905,
+  "version": "1.17.6",
+  "file": "app-1.17.6.asar",
+  "sha256": "b3559d5875a7c6b02d27a27a34de301c82b00380d4bd139bac4fb68d716d7348",
+  "size": 1626916,
   "requiresBundle": "1.2.0",
-  "notes": "Criar anúncio: a validação entende o modelo novo do ML (variações com nome do produto) e a tabela de medidas mostra de que tipo de produto ela é; tabelas de outro tipo não são escolhidas sozinhas.",
+  "notes": "Tabela de medidas recusada (SIZE_GRID_ID is not valid): a Ponte descobre o tipo de produto certo da categoria, troca sozinha por uma tabela que sirva e passa a criar as tabelas novas com o tipo certo.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-11-03T14:08:26.112Z"
+  "publishedAt": "2026-11-03T18:49:14.646Z"
 }
