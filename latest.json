@@ -1,10 +1,10 @@
 {
-  "version": "1.17.4",
-  "file": "app-1.17.4.asar",
-  "sha256": "c376c5c386525f62950aaee7c5a41d5a75438df26292dd54dda642ba7b480ddc",
-  "size": 1619023,
+  "version": "1.17.5",
+  "file": "app-1.17.5.asar",
+  "sha256": "f17b6c1b00d5c888fa46abde978fb3ba0d3bad8c54a9a6022f3e57115825dfb5",
+  "size": 1620905,
   "requiresBundle": "1.2.0",
-  "notes": "Criar anúncio: corrige o erro SIZE_GRID_ID is missing (a Ponte tirava a tabela de medidas ao tentar corrigir outro erro), mostra a recusa do ML ao validar, lembra as categorias que pedem tabela de medidas e mostra qual tabela foi enviada.",
+  "notes": "Criar anúncio: a validação entende o modelo novo do ML (variações com nome do produto) e a tabela de medidas mostra de que tipo de produto ela é; tabelas de outro tipo não são escolhidas sozinhas.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-11-03T12:25:39.904Z"
+  "publishedAt": "2026-11-03T14:08:26.112Z"
 }
