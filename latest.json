@@ -1,10 +1,10 @@
 {
-  "version": "1.17.8",
-  "file": "app-1.17.8.asar",
-  "sha256": "33bfc85564ece4c5e0082324289b467aeff9ad1664b31c72e1175fd57bb43bb9",
-  "size": 1628828,
+  "version": "1.17.9",
+  "file": "app-1.17.9.asar",
+  "sha256": "9186da8b78928872ffe273ee0eb8a2a47d1b9943daadd496891db14eeea9039f",
+  "size": 1628949,
   "requiresBundle": "1.2.0",
-  "notes": "Tabela de medidas: corrige o SIZE_GRID_ID is not valid. Um campo antigo da ficha técnica mandava um link de imagem junto com a tabela; agora só vai a tabela escolhida.",
+  "notes": "Bipagem: os anúncios ligados sozinhos depois da contagem seguem o padrão 'Quando acabar na loja' (pausar ou vender sob encomenda).",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-11-03T19:55:42.339Z"
+  "publishedAt": "2026-11-03T20:52:33.492Z"
 }
