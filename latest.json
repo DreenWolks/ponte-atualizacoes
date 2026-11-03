@@ -1,10 +1,10 @@
 {
-  "version": "1.17.6",
-  "file": "app-1.17.6.asar",
-  "sha256": "b3559d5875a7c6b02d27a27a34de301c82b00380d4bd139bac4fb68d716d7348",
-  "size": 1626916,
+  "version": "1.17.7",
+  "file": "app-1.17.7.asar",
+  "sha256": "5c7272d434f03a25adb2634950d4af4bad34d0bb79319cdf7ff1cfc290d2fdc8",
+  "size": 1628180,
   "requiresBundle": "1.2.0",
-  "notes": "Tabela de medidas recusada (SIZE_GRID_ID is not valid): a Ponte descobre o tipo de produto certo da categoria, troca sozinha por uma tabela que sirva e passa a criar as tabelas novas com o tipo certo.",
+  "notes": "Tabela de medidas: tenta o formato alternativo do código da tabela quando o ML recusa, e a validação ganha o botão Copiar a resposta do Mercado Livre.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-11-03T18:49:14.646Z"
+  "publishedAt": "2026-11-03T19:37:28.650Z"
 }
