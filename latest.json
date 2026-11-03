@@ -1,10 +1,10 @@
 {
-  "version": "1.17.3",
-  "file": "app-1.17.3.asar",
-  "sha256": "8bed8b9fa9ebbe0648f5f3194f60d18d9f736dc1a5c8a5cf7c824a2a43508e62",
-  "size": 1614839,
+  "version": "1.17.4",
+  "file": "app-1.17.4.asar",
+  "sha256": "c376c5c386525f62950aaee7c5a41d5a75438df26292dd54dda642ba7b480ddc",
+  "size": 1619023,
   "requiresBundle": "1.2.0",
-  "notes": "Tabela de medidas: quando o Mercado Livre recusa o nome da tabela, a Ponte tenta sozinha um nome mais curto, sem acentos e símbolos.",
+  "notes": "Criar anúncio: corrige o erro SIZE_GRID_ID is missing (a Ponte tirava a tabela de medidas ao tentar corrigir outro erro), mostra a recusa do ML ao validar, lembra as categorias que pedem tabela de medidas e mostra qual tabela foi enviada.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-10-31T16:03:40.580Z"
+  "publishedAt": "2026-11-03T12:25:39.904Z"
 }
