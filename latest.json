@@ -1,10 +1,10 @@
 {
-  "version": "1.17.7",
-  "file": "app-1.17.7.asar",
-  "sha256": "5c7272d434f03a25adb2634950d4af4bad34d0bb79319cdf7ff1cfc290d2fdc8",
-  "size": 1628180,
+  "version": "1.17.8",
+  "file": "app-1.17.8.asar",
+  "sha256": "33bfc85564ece4c5e0082324289b467aeff9ad1664b31c72e1175fd57bb43bb9",
+  "size": 1628828,
   "requiresBundle": "1.2.0",
-  "notes": "Tabela de medidas: tenta o formato alternativo do código da tabela quando o ML recusa, e a validação ganha o botão Copiar a resposta do Mercado Livre.",
+  "notes": "Tabela de medidas: corrige o SIZE_GRID_ID is not valid. Um campo antigo da ficha técnica mandava um link de imagem junto com a tabela; agora só vai a tabela escolhida.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-11-03T19:37:28.650Z"
+  "publishedAt": "2026-11-03T19:55:42.339Z"
 }
