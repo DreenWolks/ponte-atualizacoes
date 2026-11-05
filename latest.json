@@ -1,10 +1,10 @@
 {
-  "version": "1.17.9",
-  "file": "app-1.17.9.asar",
-  "sha256": "9186da8b78928872ffe273ee0eb8a2a47d1b9943daadd496891db14eeea9039f",
-  "size": 1628949,
+  "version": "1.18.0",
+  "file": "app-1.18.0.asar",
+  "sha256": "5c103932ecf25de6d5571373abfe8d6192db294854193ccc0cb6697a3dcc137a",
+  "size": 1680148,
   "requiresBundle": "1.2.0",
-  "notes": "Bipagem: os anúncios ligados sozinhos depois da contagem seguem o padrão 'Quando acabar na loja' (pausar ou vender sob encomenda).",
+  "notes": "Financeiro novo: visão geral, contas a pagar e a receber (com baixa em lote, parcelas, fornecedor, forma de pagamento e conta bancária) e conciliação com o extrato do banco e do Mercado Pago (OFX, CSV ou planilha).",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-11-03T20:52:33.492Z"
+  "publishedAt": "2026-11-05T13:58:47.904Z"
 }
