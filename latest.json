@@ -1,10 +1,10 @@
 {
-  "version": "1.19.0",
-  "file": "app-1.19.0.asar",
-  "sha256": "66fb67e52a352f6ca1ee43aa8dbe46ea226326ed667e517d8dc575b87f72a77d",
-  "size": 1719894,
+  "version": "1.20.0",
+  "file": "app-1.20.0.asar",
+  "sha256": "ca5d262352a67b763db37e4a0fffc136ddb8c2f291749325515ac6801dd98f6c",
+  "size": 1730518,
   "requiresBundle": "1.2.0",
-  "notes": "Financeiro: nova aba Relatórios (contas a pagar e a receber, fluxo de caixa, resultado por categoria e extrato) com período de um mês até outro e exportação em Excel e PDF.",
+  "notes": "Financeiro: várias empresas, cada uma com as suas contas a pagar e a receber, contas bancárias, conciliação e relatórios.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-11-05T16:52:30.316Z"
+  "publishedAt": "2026-11-05T17:27:11.710Z"
 }
