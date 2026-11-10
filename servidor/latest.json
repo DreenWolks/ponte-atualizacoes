@@ -1,10 +1,10 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "files": {
-    "app.mjs": "acbf44d90fb7c02b917c71752144f225712a130438f9ebe92e0c1037b4c64826",
+    "app.mjs": "0f67ceea9640b22f6667d6115ab70088f9863cfeff0fc2a38261b9eab7d1d1d8",
     "ponte-equipe.sql": "a6a6337dd6e920c2159088ccd13d7288c482bfaadcc693c1f30afd61a5b17cde"
   },
   "requiresSupervisor": "1.0.0",
-  "notes": "Banco da equipe versão 5: celular completo e notificações.",
-  "publishedAt": "2026-10-20T19:45:06.711Z"
+  "notes": "Login da equipe mais tolerante: se a resposta da renovação se perder, o computador não sai da equipe.",
+  "publishedAt": "2026-11-10T20:49:43.635Z"
 }
