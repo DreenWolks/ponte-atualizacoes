@@ -1,10 +1,10 @@
 {
-  "version": "1.20.0",
-  "file": "app-1.20.0.asar",
-  "sha256": "ca5d262352a67b763db37e4a0fffc136ddb8c2f291749325515ac6801dd98f6c",
-  "size": 1730518,
+  "version": "1.21.0",
+  "file": "app-1.21.0.asar",
+  "sha256": "b2538500a06453801caf62b0ffa99925c795b711e6a815f59fb3514b33a9f7fa",
+  "size": 1736285,
   "requiresBundle": "1.2.0",
-  "notes": "Financeiro: várias empresas, cada uma com as suas contas a pagar e a receber, contas bancárias, conciliação e relatórios.",
+  "notes": "Equipe: a conexão não cai mais por erro passageiro do servidor; se cair, basta digitar a senha para voltar à mesma equipe.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-11-05T17:27:11.710Z"
+  "publishedAt": "2026-11-10T20:54:08.393Z"
 }
