@@ -1,10 +1,10 @@
 {
-  "version": "1.21.1",
-  "file": "app-1.21.1.asar",
-  "sha256": "2e0279bfc9b2af5a8b1b4ace03d0d0dcea709c6aa34914d4d6ef3b6cbb9aea2f",
-  "size": 1738335,
+  "version": "1.21.2",
+  "file": "app-1.21.2.asar",
+  "sha256": "4bb2011391f66648a56d7b27a9d32a67879439672472bee5d9fd2ac8248a2af4",
+  "size": 1740181,
   "requiresBundle": "1.2.0",
-  "notes": "Anúncios: contas que exigem family_name (modelo novo do ML) agora são ajustadas sozinhas; referência do produto não vai mais como código de barras.",
+  "notes": "Anúncios: resposta do ML só com avisos (ex.: frete grátis obrigatório) não é mais tratada como erro.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-11-11T14:42:45.812Z"
+  "publishedAt": "2026-11-11T14:52:13.362Z"
 }
