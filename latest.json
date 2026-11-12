@@ -1,8 +1,8 @@
 {
   "version": "1.22.1",
   "file": "app-1.22.1.asar",
-  "sha256": "14f4a14cf3beb06d3cbff0264d2ae52dbd2bf4dd274f3e2418672e53075f7cee",
-  "size": 1736704,
+  "sha256": "631bf64f6b1dcbca5588e6f5685861b30a3251bb2d6acf5e7e084b7a0e9025d3",
+  "size": 1754489,
   "requiresBundle": "1.2.0",
   "notes": "Equipe: consulta o servidor com mais calma quando nada muda (gasta bem menos internet do Supabase grátis).",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
