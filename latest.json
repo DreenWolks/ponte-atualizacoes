@@ -1,10 +1,10 @@
 {
-  "version": "1.21.2",
-  "file": "app-1.21.2.asar",
-  "sha256": "4bb2011391f66648a56d7b27a9d32a67879439672472bee5d9fd2ac8248a2af4",
-  "size": 1740181,
+  "version": "1.22.0",
+  "file": "app-1.22.0.asar",
+  "sha256": "b0637e74bc9e06d2560575de9ca712796a4eb56e67023857c7dacf4dfeea0d71",
+  "size": 1752438,
   "requiresBundle": "1.2.0",
-  "notes": "Anúncios: resposta do ML só com avisos (ex.: frete grátis obrigatório) não é mais tratada como erro.",
+  "notes": "Equipe: o dono cria usuário e senha de cada pessoa e ela entra direto na equipe, sem convite.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-11-11T14:52:13.362Z"
+  "publishedAt": "2026-11-12T15:53:43.041Z"
 }
