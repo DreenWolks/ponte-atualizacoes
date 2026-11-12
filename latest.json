@@ -1,10 +1,10 @@
 {
-  "version": "1.22.0",
-  "file": "app-1.22.0.asar",
-  "sha256": "b0637e74bc9e06d2560575de9ca712796a4eb56e67023857c7dacf4dfeea0d71",
-  "size": 1752438,
+  "version": "1.22.1",
+  "file": "app-1.22.1.asar",
+  "sha256": "14f4a14cf3beb06d3cbff0264d2ae52dbd2bf4dd274f3e2418672e53075f7cee",
+  "size": 1736704,
   "requiresBundle": "1.2.0",
-  "notes": "Equipe: o dono cria usuário e senha de cada pessoa e ela entra direto na equipe, sem convite.",
+  "notes": "Equipe: consulta o servidor com mais calma quando nada muda (gasta bem menos internet do Supabase grátis).",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-11-12T15:53:43.041Z"
+  "publishedAt": "2026-11-12T16:22:41.958Z"
 }

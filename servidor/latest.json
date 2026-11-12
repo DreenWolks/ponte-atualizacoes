@@ -1,10 +1,10 @@
 {
-  "version": "1.0.2",
+  "version": "1.0.3",
   "files": {
     "app.mjs": "0f67ceea9640b22f6667d6115ab70088f9863cfeff0fc2a38261b9eab7d1d1d8",
-    "ponte-equipe.sql": "a6a6337dd6e920c2159088ccd13d7288c482bfaadcc693c1f30afd61a5b17cde"
+    "ponte-equipe.sql": "bd2bba428bb2fc693d19a7e5ac270015110d3cb74a27c473244b02106fd790e4"
   },
   "requiresSupervisor": "1.0.0",
-  "notes": "Login da equipe mais tolerante: se a resposta da renovação se perder, o computador não sai da equipe.",
-  "publishedAt": "2026-11-10T20:49:43.635Z"
+  "notes": "Banco 6: a equipe consulta o servidor gastando menos internet.",
+  "publishedAt": "2026-11-12T16:19:01.314Z"
 }
