@@ -1,10 +1,10 @@
 {
-  "version": "1.23.0",
-  "file": "app-1.23.0.asar",
-  "sha256": "c428b90bba77f82ff8b5185a5fc4b7fd7eea67a27de2a09fcd90e9293bf54755",
-  "size": 1762799,
+  "version": "1.23.1",
+  "file": "app-1.23.1.asar",
+  "sha256": "b6808a0a64eafadb7d0d5029ed6fe23e1c7aa633fe76b0c7f98da277bc28915a",
+  "size": 1765229,
   "requiresBundle": "1.2.0",
-  "notes": "Anúncios: salvar sem publicar (rascunhos em Produtos e anúncios); erro de permissão do ML em conta da equipe tenta de novo com o acesso da equipe e mostra o motivo.",
+  "notes": "Anúncios: quando o Mercado Livre desativa um formato de consulta (ResourceDeprecated), a Ponte usa outro sozinha.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-11-13T16:43:22.951Z"
+  "publishedAt": "2026-11-13T17:15:37.622Z"
 }
