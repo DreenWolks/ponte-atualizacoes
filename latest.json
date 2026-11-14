@@ -1,10 +1,10 @@
 {
-  "version": "1.23.1",
-  "file": "app-1.23.1.asar",
-  "sha256": "b6808a0a64eafadb7d0d5029ed6fe23e1c7aa633fe76b0c7f98da277bc28915a",
-  "size": 1765229,
+  "version": "1.23.2",
+  "file": "app-1.23.2.asar",
+  "sha256": "841a17a60a3bc57006e0ac700c638b04cef0690c19bf2e1a2892aed3434a9905",
+  "size": 1771355,
   "requiresBundle": "1.2.0",
-  "notes": "Anúncios: quando o Mercado Livre desativa um formato de consulta (ResourceDeprecated), a Ponte usa outro sozinha.",
+  "notes": "Criar anúncio: vários fornecedores no rascunho, que vão junto quando publicar.",
   "installerUrl": "https://github.com/DreenWolks/ponte-atualizacoes/releases",
-  "publishedAt": "2026-11-13T17:15:37.622Z"
+  "publishedAt": "2026-11-14T13:53:37.675Z"
 }
